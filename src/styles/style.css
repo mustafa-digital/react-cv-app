@@ -1,0 +1,115 @@
+:root {
+    --section-border: #94a3b8;
+    --general-font-color: #4b5563;
+}
+
+* {
+    padding : 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+#root {
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+body {
+    margin: 100px;
+    display: flex;
+    place-items: start;
+    min-width: 320px;
+    min-height: 100vh;
+    color: var(--general-font-color);
+}
+
+section {
+    display: grid;
+    position: relative;
+    width: 428px;
+}
+
+section h1 {
+    font-size: 2rem;
+    justify-self: start;
+}
+
+form,
+.section-border {
+    border: 2px solid var(--section-border);
+    border-radius: 10px;
+    padding: 8px;
+    min-height: 200px;
+    min-width: 300px;
+}
+
+#general-form,
+#education-form {
+    display: grid;
+    justify-content: start;
+    gap: 10px;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    font-size: 1.2rem;
+}
+
+input {
+    height: 35px;
+    padding: 5px;
+    font-size: 0.9rem;
+}
+
+.name-wrapper {
+    display: flex;
+    align-items: end;
+    gap: 8px;
+}
+
+.nav-btn {
+    width: 64px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.right {
+    position: absolute;
+    right: -50px;
+    top: 45%;
+}
+
+.left {
+    position: absolute;
+    left: -50px;
+    top: 45%;
+}
+
+.nav-btn img {
+    width: 64px;
+}
+
+.degree-wrapper,
+.date-inputs-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#degree-select {
+    height: 35px;
+    font-size: 0.80rem;
+    width: 200px;
+}
+
