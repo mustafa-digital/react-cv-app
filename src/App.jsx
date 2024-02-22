@@ -4,10 +4,12 @@ import { Welcome } from './components/Welcome';
 import { LeftArrow } from './components/LeftArrow';
 import { RightArrow } from './components/RightArrow';
 import { Education } from './components/Education';
+import { Work } from './components/Work';
 
 const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
 const EDUCATION = 2;
+const WORK = 3;
 
 function App() {
   const [status, setStatus] = useState(WELCOME_PAGE);
@@ -18,6 +20,12 @@ function App() {
   const [education, setEducation] = useState(new Map());
   const [eduCount, setEduCount] = useState(0);
   const [eduFormEdit, setEduFormEdit] = useState(null);
+  const [work, setWork] = useState(new Map());
+  const [workCount, setWorkCount] = useState(0);
+
+  const handleAddWorkClick = (e) => {
+    setWorkCount(workCount + 1);
+  }
 
   const eduFormEditHandler = (e) => {
     setEduFormEdit(e.target.closest('#education-form').dataset.index);
@@ -141,6 +149,17 @@ function App() {
     </>
     )
   }
+  else if (status === WORK) {
+    return(
+        <>
+            <LeftArrow handleClick={handleLeftArrowClick}/>
+
+            <Work workCount={workCount}
+                  handleAddWorkClick={handleAddWorkClick} />
+
+            <RightArrow handleClick={handleRightArrowClick} form='general-form'/>
+        </>
+    )}
 }
 
 export default App;

@@ -11,7 +11,7 @@ export function GeneralInfo({ firstName,
 
     return (
         <section>
-            <h1>General Info</h1>
+            <h1>General Information</h1>
             <form id='general-form' onSubmit={handleSubmit}>
                 <div className='name-wrapper'>
                     {/* first name input  */}

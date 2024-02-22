@@ -53,9 +53,9 @@ form,
 }
 
 #general-form,
-#education-form {
+#education-form,
+#work-form {
     display: grid;
-    justify-content: start;
     gap: 10px;
     margin-bottom: 25px;
 }
@@ -117,7 +117,7 @@ input {
     width: 200px;
 }
 
-.add-edu-btn {
+.add-section-btn {
     width: 64px;
     background: transparent;
     border: none;
@@ -126,8 +126,12 @@ input {
     cursor: pointer;
 }
 
-.add-edu-text {
+.add-section-text {
     font-size: 1.2rem;
     color: var(--add-edu-text-color);
+}
+
+.job-desc-txtarea {
+    resize: none;
 }
 

@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState } from "react";
+import { AddSection } from "./AddSection";
 
 export function Education({ eduCount,
                             education,
@@ -43,19 +44,7 @@ export function Education({ eduCount,
                         return <div key={index}>{form} </div>
                 })}
             </div>
-            <AddEducationSection handleClick={handleAddEducationClick} />
-        </section>
-    )
-}
-
-function AddEducationSection({ handleClick }) {
-    return (
-        <section className="section-border">
-            <button className='add-edu-btn'
-                    onClick={handleClick}>
-                <img src='src/assets/plus-box.svg' alt='Add education information button'></img>
-            </button>
-            <h2 className='add-edu-text'>Add Education</h2>
+            <AddSection sectionName='Education' handleClick={handleAddEducationClick} />
         </section>
     )
 }
@@ -119,22 +108,22 @@ function EducationForm({
                     </label>
                 </div>
 
-                    {/* date of study input */}
-                    <div className="date-study-wrapper">
-                        <label htmlFor="date-study-start" className='date-study-lbl'>Date of Study</label>
-                        <div className="date-inputs-wrapper">
-                            <input type='date'
-                                        name='date-study-start'
-                                        id='date-study-start'
-                                        placeholder=''
-                                        value={education.get(index).start}
-                                        onChange={handleStudyStartChange} />
-                            <span> to </span>
-                            <input type='date'
-                                        name='date-study-end'
-                                        placeholder=''
-                                        value={education.get(index).end}
-                                        onChange={handleStudyEndChange} />
+                {/* date of study input */}
+                <div>
+                    <label htmlFor="date-study-start" className='date-study-lbl'>Date of Study</label>
+                    <div className="date-inputs-wrapper">
+                        <input type='date'
+                                    name='date-study-start'
+                                    id='date-study-start'
+                                    placeholder=''
+                                    value={education.get(index).start}
+                                    onChange={handleStudyStartChange} />
+                        <span> to </span>
+                        <input type='date'
+                                    name='date-study-end'
+                                    placeholder=''
+                                    value={education.get(index).end}
+                                    onChange={handleStudyEndChange} />
                     </div>
                 </div>
             </form>
