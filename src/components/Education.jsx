@@ -1,29 +1,85 @@
-export function Education({ 
-                            schoolName,
-                            degree,
-                            titleStudy,
-                            studyStart,
-                            studyEnd,
+import { useState } from "react"
+
+export function Education({ eduCount,
+                            education,
                             handleSchoolNameChange,
                             handleDegreeSelectChange,
                             handleTitleStudyChange,
                             handleStudyStartChange,
                             handleStudyEndChange,
-                            handleSubmit 
+                            handleSubmit,
+                            handleAddEducationClick,
+                            eduFormEditHandler
                         }) {
 
-    
-    // const [selectedDegree, setSelectedDegree] = useState('');
+    // Creates EducationForm components based on eduCount number, and pushes them unto eduForms array
+    function getEduForms() {
+        let eduForms = [];
+
+        for (let i = 0; i < eduCount; i++) {
+            eduForms.push( <EducationForm 
+                                            index={i.toString()} 
+                                            education={education}
+                                            handleSchoolNameChange={handleSchoolNameChange}
+                                            handleDegreeSelectChange={handleDegreeSelectChange}
+                                            handleTitleStudyChange={handleTitleStudyChange}
+                                            handleStudyStartChange={handleStudyStartChange}
+                                            handleStudyEndChange={handleStudyEndChange} 
+                                            handleSubmit={handleSubmit}
+                                            eduFormEditHandler={eduFormEditHandler} /> );
+        }
+
+        return eduForms;
+    }
+
+    // generate educationforms and place them in eduforms array
+    let eduForms = getEduForms(); 
     return (
-        <section>
+        <section className='edu-section'>
             <h1>Education</h1>
-            <form id='education-form' onSubmit={handleSubmit}>
+            {/* render the educationForms */}
+            <div>              
+                {eduForms.map((form, index) => { 
+                        return <div key={index}>{form} </div>
+                })}
+            </div>
+            <AddEducationSection handleClick={handleAddEducationClick} />
+        </section>
+    )
+}
+
+function AddEducationSection({ handleClick }) {
+    return (
+        <section className="section-border">
+            <button className='add-edu-btn'
+                    onClick={handleClick}>
+                <img src='src/assets/plus-box.svg' alt='Add education information button'></img>
+            </button>
+            <h2 className='add-edu-text'>Add Education</h2>
+        </section>
+    )
+}
+
+function EducationForm({
+                        index,
+                        education,
+                        handleSchoolNameChange,
+                        handleDegreeSelectChange,
+                        handleTitleStudyChange,
+                        handleStudyStartChange,
+                        handleStudyEndChange,
+                        handleSubmit,
+                        eduFormEditHandler 
+                    }) {
+    return (
+        <>
+            <form id='education-form' onSubmit={handleSubmit} onClick={eduFormEditHandler} data-index={index}>
                 {/* school name input  */}
                 <label> College Name
                     <input type='text'
                             name='school-name'
                             placeholder=''
-                            value={schoolName}
+                            value={education.get(index).name}
                             onChange={handleSchoolNameChange} />
                 </label>
 
@@ -32,7 +88,7 @@ export function Education({
                     <label> Degree
                         <select name='degree'
                                 id='degree-select'
-                                value={degree} 
+                                value={education.get(index).degree} 
                                 onChange={handleDegreeSelectChange} >
                 
                             <option value=''>Choose your degree</option>
@@ -58,31 +114,30 @@ export function Education({
                         <input type='text'
                                     name='title-study'
                                     placeholder=''
-                                    value={titleStudy}
+                                    value={education.get(index).title}
                                     onChange={handleTitleStudyChange} />
                     </label>
                 </div>
 
                     {/* date of study input */}
-                        <div className="date-study-wrapper">
-                            <label htmlFor="date-study-start" className='date-study-lbl'>Date of Study</label>
-                            <div className="date-inputs-wrapper">
-                                <input type='date'
-                                            name='date-study-start'
-                                            id='date-study-start'
-                                            placeholder=''
-                                            value={studyStart}
-                                            onChange={handleStudyStartChange} />
-                                <span> to </span>
-                                <input type='date'
-                                            name='date-study-end'
-                                            placeholder=''
-                                            value={studyEnd}
-                                            onChange={handleStudyEndChange} />
-                            </div>
-                        </div>
-
+                    <div className="date-study-wrapper">
+                        <label htmlFor="date-study-start" className='date-study-lbl'>Date of Study</label>
+                        <div className="date-inputs-wrapper">
+                            <input type='date'
+                                        name='date-study-start'
+                                        id='date-study-start'
+                                        placeholder=''
+                                        value={education.get(index).start}
+                                        onChange={handleStudyStartChange} />
+                            <span> to </span>
+                            <input type='date'
+                                        name='date-study-end'
+                                        placeholder=''
+                                        value={education.get(index).end}
+                                        onChange={handleStudyEndChange} />
+                    </div>
+                </div>
             </form>
-        </section>
+        </>
     )
 }

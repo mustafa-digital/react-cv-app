@@ -15,30 +15,54 @@ function App() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [schoolName, setSchoolName] = useState('');
-  const [degree, setDegree] = useState('');
-  const [titleStudy, setTitleStudy] = useState('');
-  const [studyStart, setStudyStart] = useState('');
-  const [studyEnd, setStudyEnd] = useState('');
+  const [education, setEducation] = useState(new Map());
+  const [eduCount, setEduCount] = useState(0);
+  const [eduFormEdit, setEduFormEdit] = useState(null);
+
+  const eduFormEditHandler = (e) => {
+    setEduFormEdit(e.target.closest('#education-form').dataset.index);
+  }
+
+  const handleAddEducationClick = () => {
+    setEduCount(eduCount + 1);
+    let newEducation = education.set(eduCount.toString(), { name: '',
+                                                            degree: '',
+                                                            title: '',
+                                                            start: '',
+                                                            end: '' 
+                                                        });
+
+    setEducation(newEducation);
+  }
   
   const handleSchoolNameChange = (e) => {
-    setSchoolName(e.target.value);
+    let newEducation = new Map(education);
+    newEducation.get(eduFormEdit).name = e.target.value;
+    setEducation(newEducation);
   }
 
   const handleDegreeSelectChange = (e) => {
-    setDegree(e.target.value);
+    let newEducation = new Map(education);
+    newEducation.get(eduFormEdit).degree = e.target.value;
+    setEducation(newEducation);
   }
 
   const handleTitleStudyChange = (e) => {
-    setTitleStudy(e.target.value);
+    let newEducation = new Map(education);
+    newEducation.get(eduFormEdit).title = e.target.value;
+    setEducation(newEducation);
   }
 
   const handleStudyStartChange = (e) => {
-    setStudyStart(e.target.value);
+    let newEducation = new Map(education);
+    newEducation.get(eduFormEdit).start = e.target.value;
+    setEducation(newEducation);
   }
 
   const handleStudyEndChange = (e) => {
-    setStudyEnd(e.target.value);
+    let newEducation = new Map(education);
+    newEducation.get(eduFormEdit).end = e.target.value;
+    setEducation(newEducation);
   }
 
   const handleFirstNameChange = (e) => {
@@ -102,17 +126,16 @@ function App() {
         <>
         <LeftArrow handleClick={handleLeftArrowClick}/>
 
-        <Education schoolName={schoolName}
-                   degree={degree}
-                   titleStudy={titleStudy}
-                   studyStart={studyStart}
-                   studyEnd={studyEnd}
+        <Education education={education}
+                   eduCount={eduCount}
                    handleSchoolNameChange={handleSchoolNameChange}
                    handleDegreeSelectChange={handleDegreeSelectChange}
                    handleTitleStudyChange={handleTitleStudyChange}
                    handleStudyStartChange={handleStudyStartChange}
                    handleStudyEndChange={handleStudyEndChange} 
-                   handleSubmit={handleSubmit}/>
+                   handleSubmit={handleSubmit}
+                   handleAddEducationClick={handleAddEducationClick}
+                   eduFormEditHandler={eduFormEditHandler} />
 
         <RightArrow handleClick={handleRightArrowClick} form='general-form'/>
     </>
