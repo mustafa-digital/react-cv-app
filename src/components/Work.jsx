@@ -1,7 +1,15 @@
 import { AddSection } from "./AddSection"
 
-export function Work({ workCount,
+export function Work({ work,
+                       workCount,
+                       handleWorkTitleChange,
+                       handleCompanyNameChange,
+                       handleCompanyLocationChange,
+                       handleWorkDescriptionChange,
+                       handleWorkStartChange,
+                       handleWorkEndChange,
                        handleAddWorkClick,
+                       formEditingHandler,
                        handleSubmit }) {
 
     // Creates WorkForm components based on workCount number, and pushes them unto workForms array
@@ -10,7 +18,17 @@ export function Work({ workCount,
 
         for (let i = 0; i < workCount; i++) {
             workForms.push( <WorkForm index={i.toString()}
-                                        handleSubmit={handleSubmit} /> 
+                                      work={work}
+                                      workCount={workCount}
+                                      handleWorkTitleChange={handleWorkTitleChange}
+                                      handleCompanyNameChange={handleCompanyNameChange}
+                                      handleCompanyLocationChange={handleCompanyLocationChange}
+                                      handleWorkDescriptionChange={handleWorkDescriptionChange}
+                                      handleWorkStartChange={handleWorkStartChange}
+                                      handleWorkEndChange={handleWorkEndChange}
+                                      handleSubmit={handleSubmit}
+                                      handleAddWorkClick={handleAddWorkClick} 
+                                      formEditingHandler={formEditingHandler} /> 
                         );}
 
         return workForms;
@@ -33,34 +51,51 @@ export function Work({ workCount,
 }
 
 function WorkForm({ index,
-                    handleSubmit}) {
+                       work,
+                       handleWorkTitleChange,
+                       handleCompanyNameChange,
+                       handleCompanyLocationChange,
+                       handleWorkDescriptionChange,
+                       handleWorkStartChange,
+                       handleWorkEndChange,
+                       formEditingHandler,
+                       handleSubmit
+                  }) {
     return (
         <>
-            <form id='work-form' onSubmit={handleSubmit} data-index={index}>
+            <form id='work-form' onSubmit={handleSubmit} onClick={formEditingHandler} data-index={index}>
                 <label> Position Title
                     <input  type='text'
                             name='position-title'
-                            placeholder='' 
+                            placeholder=''
+                            value={work.get(index).title}
+                            onChange={handleWorkTitleChange} 
                             required />
                 </label>
                 <label> Company Name
                     <input type='text'
                             name='company-name'
                             placeholder='' 
+                            value={work.get(index).company}
+                            onChange={handleCompanyNameChange} 
                             required />
                 </label>
 
                 <label> Location
                     <input type='text'
                             name='company-location'
-                            placeholder='' />
+                            placeholder=''
+                            value={work.get(index).location}
+                            onChange={handleCompanyLocationChange}  />
                 </label>
 
                 <label> Job Description
                     <textarea className="job-desc-txtarea"
                               cols='20'
                               rows='15'
-                              wrap='hard' />
+                              wrap='hard' 
+                              value={work.get(index).description}
+                              onChange={handleWorkDescriptionChange} />
                 </label>
 
                 {/* work duration input */}
@@ -71,19 +106,16 @@ function WorkForm({ index,
                                     name='date-work-start'
                                     id='date-work-start'
                                     placeholder=''
-                                    // value={}
-                                    // onChange={handleStudyStartChange}
-                                    />
+                                    value={work.get(index).start}
+                                    onChange={handleWorkStartChange} />
                         <span> to </span>
                         <input type='date'
                                     name='date-work-end'
                                     placeholder=''
-                                    // value={education.get(index).end}
-                                    // onChange={handleStudyEndChange} 
-                                    />
+                                    value={work.get(index).end}
+                                    onChange={handleWorkEndChange}  />
                     </div>
-                </div>
-                
+                </div>   
             </form>  
         </>
     )

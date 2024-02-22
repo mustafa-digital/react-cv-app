@@ -10,7 +10,7 @@ export function Education({ eduCount,
                             handleStudyEndChange,
                             handleSubmit,
                             handleAddEducationClick,
-                            eduFormEditHandler
+                            formEditingHandler
                         }) {
 
     // Creates EducationForm components based on eduCount number, and pushes them unto eduForms array
@@ -27,7 +27,7 @@ export function Education({ eduCount,
                                             handleStudyStartChange={handleStudyStartChange}
                                             handleStudyEndChange={handleStudyEndChange} 
                                             handleSubmit={handleSubmit}
-                                            eduFormEditHandler={eduFormEditHandler} /> );
+                                            formEditingHandler={formEditingHandler} /> );
         }
 
         return eduForms;
@@ -58,11 +58,11 @@ function EducationForm({
                         handleStudyStartChange,
                         handleStudyEndChange,
                         handleSubmit,
-                        eduFormEditHandler 
+                        formEditingHandler 
                     }) {
     return (
         <>
-            <form id='education-form' onSubmit={handleSubmit} onClick={eduFormEditHandler} data-index={index}>
+            <form id='education-form' onSubmit={handleSubmit} onClick={formEditingHandler} data-index={index}>
                 {/* school name input  */}
                 <label> College Name
                     <input type='text'
