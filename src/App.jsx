@@ -23,7 +23,51 @@ function App() {
   const [work, setWork] = useState(new Map());
   const [workCount, setWorkCount] = useState(0);
 
-  const handleAddWorkClick = (e) => {
+  const handleGeneralSubmit = () => {
+    console.log('submit');
+
+    return true;
+  }
+
+  /* handler for close button on education forms
+     removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
+  */
+  const handleEduClose = (e) => {
+    let indexToDelete = e.target.nextSibling.dataset.index;
+    let newEdu = new Map();
+    for (const [index, edu] of education.entries()){
+        if (index > indexToDelete){
+            newEdu.set((index - 1).toString(), edu);
+        }
+        else if (index < Number(indexToDelete)){
+            newEdu.set(index.toString(), edu);
+        }
+    }
+    setEduCount(eduCount - 1);
+    setEducation(newEdu);
+    setFormEditing(0);
+  }
+
+  /* handler for close button on work forms
+     removes the entry from work map, reduces the work count, and moves entries with indices higher than the deleted index up one place 
+  */
+  const handleWorkClose = (e) => {
+    let indexToDelete = e.target.nextSibling.dataset.index;
+    let newWork = new Map();
+    for (const [index, job] of work.entries()){
+        if (index > indexToDelete){
+            newWork.set((index - 1).toString(), job);
+        }
+        else if (index < Number(indexToDelete)){
+            newWork.set(index.toString(), job);
+        }
+    }
+    setWorkCount(workCount - 1);
+    setWork(newWork);
+    setFormEditing(0);
+  }
+
+  const handleAddWorkClick = () => {
     setWorkCount(workCount + 1);
     let newWork = work.set(workCount.toString(), { title: '',
                                                    company: '',
@@ -37,37 +81,37 @@ function App() {
 
   const handleWorkTitleChange = (e) => {
     let newWork = new Map(work);
-    newWork.get(formEditing).title = e.target.value;
+    newWork.get(formEditing.toString()).title = e.target.value;
     setWork(newWork);
   }
 
   const handleCompanyNameChange = (e) => {
     let newWork = new Map(work);
-    newWork.get(formEditing).company = e.target.value;
+    newWork.get(formEditing.toString()).company = e.target.value;
     setWork(newWork);
   }
 
   const handleCompanyLocationChange = (e) => {
     let newWork = new Map(work);
-    newWork.get(formEditing).location = e.target.value;
+    newWork.get(formEditing.toString()).location = e.target.value;
     setWork(newWork);
   }
 
   const handleWorkDescriptionChange = (e) => {
     let newWork = new Map(work);
-    newWork.get(formEditing).description = e.target.value;
+    newWork.get(formEditing.toString()).description = e.target.value;
     setWork(newWork);
   }
 
   const handleWorkStartChange = (e) => {
     let newWork = new Map(work);
-    newWork.get(formEditing).start = e.target.value;
+    newWork.get(formEditing.toString()).start = e.target.value;
     setWork(newWork);
   }
 
   const handleWorkEndChange = (e) => {
     let newWork = new Map(work);
-    newWork.get(formEditing).end = e.target.value;
+    newWork.get(formEditing.toString()).end = e.target.value;
     setWork(newWork);
   }
 
@@ -89,31 +133,31 @@ function App() {
   
   const handleSchoolNameChange = (e) => {
     let newEducation = new Map(education);
-    newEducation.get(formEditing).name = e.target.value;
+    newEducation.get(formEditing.toString()).name = e.target.value;
     setEducation(newEducation);
   }
 
   const handleDegreeSelectChange = (e) => {
     let newEducation = new Map(education);
-    newEducation.get(formEditing).degree = e.target.value;
+    newEducation.get(formEditing.toString()).degree = e.target.value;
     setEducation(newEducation);
   }
 
   const handleTitleStudyChange = (e) => {
     let newEducation = new Map(education);
-    newEducation.get(formEditing).title = e.target.value;
+    newEducation.get(formEditing.toString()).title = e.target.value;
     setEducation(newEducation);
   }
 
   const handleStudyStartChange = (e) => {
     let newEducation = new Map(education);
-    newEducation.get(formEditing).start = e.target.value;
+    newEducation.get(formEditing.toString()).start = e.target.value;
     setEducation(newEducation);
   }
 
   const handleStudyEndChange = (e) => {
     let newEducation = new Map(education);
-    newEducation.get(formEditing).end = e.target.value;
+    newEducation.get(formEditing.toString()).end = e.target.value;
     setEducation(newEducation);
   }
 
@@ -135,6 +179,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('submitted');
   }
 
   const handleRightArrowClick = () => {
@@ -169,7 +214,7 @@ function App() {
                           handlePhoneChange={handlePhoneChange}
                           handleSubmit={handleSubmit} />
 
-            <RightArrow handleClick={handleRightArrowClick} form='general-form'/>
+            <RightArrow handleClick={handleRightArrowClick} handleSubmit={handleGeneralSubmit}/>
         </>
     )
   }
@@ -187,9 +232,10 @@ function App() {
                    handleStudyEndChange={handleStudyEndChange} 
                    handleSubmit={handleSubmit}
                    handleAddEducationClick={handleAddEducationClick}
-                   formEditingHandler={formEditingHandler} />
+                   formEditingHandler={formEditingHandler} 
+                   handleClose={handleEduClose} />
 
-        <RightArrow handleClick={handleRightArrowClick} form='general-form'/>
+        <RightArrow handleClick={handleRightArrowClick}/>
     </>
     )
   }
@@ -208,9 +254,10 @@ function App() {
                   handleWorkEndChange={handleWorkEndChange}
                   handleSubmit={handleSubmit}
                   handleAddWorkClick={handleAddWorkClick} 
-                  formEditingHandler={formEditingHandler} />
+                  formEditingHandler={formEditingHandler}
+                  handleClose={handleWorkClose} />
 
-            <RightArrow handleClick={handleRightArrowClick} form='general-form'/>
+            <RightArrow handleClick={handleRightArrowClick}/>
         </>
     )}
 }

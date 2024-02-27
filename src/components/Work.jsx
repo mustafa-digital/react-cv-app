@@ -10,7 +10,8 @@ export function Work({ work,
                        handleWorkEndChange,
                        handleAddWorkClick,
                        formEditingHandler,
-                       handleSubmit }) {
+                       handleSubmit,
+                       handleClose }) {
 
     // Creates WorkForm components based on workCount number, and pushes them unto workForms array
     function getWorkForms() {
@@ -28,7 +29,8 @@ export function Work({ work,
                                       handleWorkEndChange={handleWorkEndChange}
                                       handleSubmit={handleSubmit}
                                       handleAddWorkClick={handleAddWorkClick} 
-                                      formEditingHandler={formEditingHandler} /> 
+                                      formEditingHandler={formEditingHandler}
+                                      handleClose={handleClose} /> 
                         );}
 
         return workForms;
@@ -40,7 +42,7 @@ export function Work({ work,
         <section>
             <h1>Work Experience</h1>
             {/* render the educationForms */}
-            <div>              
+            <div style={{position:'relative'}}>              
                 {workForms.map((form, index) => { 
                         return <div key={index}>{form} </div>
                 })}
@@ -50,7 +52,7 @@ export function Work({ work,
     )
 }
 
-function WorkForm({ index,
+function WorkForm({    index,
                        work,
                        handleWorkTitleChange,
                        handleCompanyNameChange,
@@ -59,11 +61,23 @@ function WorkForm({ index,
                        handleWorkStartChange,
                        handleWorkEndChange,
                        formEditingHandler,
-                       handleSubmit
+                       handleSubmit,
+                       handleClose
                   }) {
+    index = index.toString();
     return (
         <>
-            <form id='work-form' onSubmit={handleSubmit} onClick={formEditingHandler} data-index={index}>
+            <button className='close-button' 
+                    type='button' 
+                    onClick={handleClose}>
+                &times;
+            </button>
+
+            <form id='work-form' 
+                    onSubmit={handleSubmit} 
+                    onClick={formEditingHandler} 
+                    data-index={index}>
+
                 <label> Position Title
                     <input  type='text'
                             name='position-title'

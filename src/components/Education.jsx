@@ -10,7 +10,8 @@ export function Education({ eduCount,
                             handleStudyEndChange,
                             handleSubmit,
                             handleAddEducationClick,
-                            formEditingHandler
+                            formEditingHandler,
+                            handleClose
                         }) {
 
     // Creates EducationForm components based on eduCount number, and pushes them unto eduForms array
@@ -27,7 +28,8 @@ export function Education({ eduCount,
                                             handleStudyStartChange={handleStudyStartChange}
                                             handleStudyEndChange={handleStudyEndChange} 
                                             handleSubmit={handleSubmit}
-                                            formEditingHandler={formEditingHandler} /> );
+                                            formEditingHandler={formEditingHandler} 
+                                            handleClose={handleClose} /> );
         }
 
         return eduForms;
@@ -39,7 +41,7 @@ export function Education({ eduCount,
         <section className='edu-section'>
             <h1>Education</h1>
             {/* render the educationForms */}
-            <div>              
+            <div style={{position: 'relative'}}>              
                 {eduForms.map((form, index) => { 
                         return <div key={index}>{form} </div>
                 })}
@@ -58,10 +60,13 @@ function EducationForm({
                         handleStudyStartChange,
                         handleStudyEndChange,
                         handleSubmit,
-                        formEditingHandler 
+                        formEditingHandler,
+                        handleClose 
                     }) {
+    index = index.toString();
     return (
         <>
+            <button className='close-button' type='button' onClick={handleClose}>&times;</button>
             <form id='education-form' onSubmit={handleSubmit} onClick={formEditingHandler} data-index={index}>
                 {/* school name input  */}
                 <label> College Name
