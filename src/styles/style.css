@@ -28,7 +28,7 @@ body {
     display: flex;
     place-items: start;
     min-width: 320px;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     color: var(--general-font-color);
 }
 
@@ -144,4 +144,53 @@ input {
     cursor: pointer;
     color: var(--general-font-color);
 }
+
+.save-button {
+    width: 50px;
+    justify-self: end;
+}
+
+.error-message {
+    position: absolute;
+    color: red;
+    font-size: 1.0rem;
+    align-self: end;
+}
+
+.invalid {
+    border: 1px solid #b92326;
+    background-color: rgba(185, 35, 38, 0.25);
+}
+
+input:valid {
+    border: 1px solid #8BC34A;
+    background-color: rgba(139, 195, 74, 0.25);
+}
+
+input:focus {
+    background-color: #fafafa;
+}
+
+.modal-backdrop {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100vw;
+    background: rgba( 0, 0, 0, 0.2);
+}
+
+.warning-dialog {
+    position: relative;
+    top: 40%;
+    left: 40%;
+    background-color: #fafafa;
+    border: 2px solid #242424;
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    height: 100px;
+}
+
+
 

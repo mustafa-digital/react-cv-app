@@ -5,6 +5,7 @@ import { LeftArrow } from './components/LeftArrow';
 import { RightArrow } from './components/RightArrow';
 import { Education } from './components/Education';
 import { Work } from './components/Work';
+import { UnsavedChangesDialog } from './components/UnsavedChangesDialog';
 
 const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
@@ -13,20 +14,77 @@ const WORK = 3;
 
 function App() {
   const [status, setStatus] = useState(WELCOME_PAGE);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [firstName, setFirstName] = useState({ value: '', isValid: true, message: '' });
+  const [lastName, setLastName] = useState({ value: '', isValid: true, message: '' });
+  const [email, setEmail] = useState({ value: '', isValid: true, message: '' });
+  const [phone, setPhone] = useState({ value: '', isValid: true, message: '' });
   const [education, setEducation] = useState(new Map());
   const [eduCount, setEduCount] = useState(0);
   const [formEditing, setFormEditing] = useState(null);
   const [work, setWork] = useState(new Map());
   const [workCount, setWorkCount] = useState(0);
+  const [hasChanged, setHasChanged] = useState(false);
 
-  const handleGeneralSubmit = () => {
-    console.log('submit');
+  const handleFormChange = () => {
+    setHasChanged(true);
+  }
 
-    return true;
+  const handleGeneralSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const firstNameInput = document.querySelector('input[name="first-name"]');
+    const lastNameInput = document.querySelector('input[name="last-name"]');
+    const emailInput = document.querySelector('input[name="email"]');
+    const phoneInput = document.querySelector('input[name="phone"]');
+
+
+    if (firstNameInput.validity.valid) {
+        const newName = { ...firstName, value: formData.get('first-name'), isValid: true, message: '' }
+        setFirstName(newName);
+        firstNameInput.classList.remove('invalid');
+    } else {
+        const newName = { ...firstName, isValid: false, message: 'required' }
+        setFirstName(newName);
+        firstNameInput.classList.add('invalid');
+    }
+
+    if (lastNameInput.validity.valid) {
+        const newName = { ...lastName, value: formData.get('last-name'), isValid: true, message: '' }
+        setLastName(newName);    
+        lastNameInput.classList.remove('invalid');
+    } else {
+        const newName = { ...lastName, isValid: false, message: 'required' }
+        setLastName(newName);
+        lastNameInput.classList.add('invalid');
+    }
+
+    if (emailInput.validity.valid) {
+        const newEmail = { ...email, value: formData.get('email'), isValid: true, message: '' }
+        setEmail(newEmail);
+        emailInput.classList.remove('invalid');
+    } else {
+        const newEmail = { ...email, isValid: false }
+        if (emailInput.validity.valueMissing) { newEmail.message = 'required'; } 
+        else if (emailInput.validity.typeMismatch) { newEmail.message = 'not a valid email' }
+
+        setEmail(newEmail);
+        emailInput.classList.add('invalid');
+    }
+
+    if (phoneInput.validity.valid) {
+        const newPhone = { ...phone, value: formData.get('phone'), isValid: true, message: '' }
+        setPhone(newPhone);
+        phoneInput.classList.remove('invalid');
+    } else {
+        const newPhone = { ...phone, isValid: false}
+        if (phoneInput.validity.valueMissing) { newPhone.message = 'required'; } 
+        else if (phoneInput.validity.patternMismatch) { newPhone.message = 'format: 555-555-5555' }
+
+        setPhone(newPhone);
+        phoneInput.classList.add('invalid');
+    }
+    setHasChanged(false);
   }
 
   /* handler for close button on education forms
@@ -162,31 +220,45 @@ function App() {
   }
 
   const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
+    if (e.target.checkValidity()) {
+        const newName = {...firstName, isValid: true}
+        setFirstName(newName);
+    }
   }
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
+    if (e.target.checkValidity()) {
+        const newName = {...lastName, isValid: true}
+        setLastName(newName);
+    }
   }
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    if (e.target.checkValidity()) {
+        const newEmail = {...email, isValid: true}
+        setEmail(newEmail);
+    }
   }
 
   const handlePhoneChange = (e) => {
-    setPhone(e.target.value);
+    if (e.target.checkValidity()) {
+        const newPhone = {...phone, isValid: true}
+        setPhone(newPhone);
+    }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault();
     console.log('submitted');
   }
 
   const handleRightArrowClick = () => {
+    setHasChanged(false);
     setStatus(status + 1);
   }
 
   const handleLeftArrowClick = () => {
+    setHasChanged(false);
     setStatus(status - 1);
   }
 
@@ -195,7 +267,7 @@ function App() {
     return (
         <>
             <Welcome />
-            <RightArrow handleClick={handleRightArrowClick} />
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
         </>
     )
   }
@@ -204,17 +276,18 @@ function App() {
         <>
             <LeftArrow handleClick={handleLeftArrowClick}/>
 
-            <GeneralInfo firstName={firstName}
+            <GeneralInfo  firstName={firstName}
                           lastName={lastName}
                           email={email}
                           phone={phone}
                           handleFirstNameChange={handleFirstNameChange}
                           handleLastNameChange={handleLastNameChange}
                           handleEmailChange={handleEmailChange}
-                          handlePhoneChange={handlePhoneChange}
-                          handleSubmit={handleSubmit} />
+                          handlePhoneChange={handlePhoneChange} 
+                          handleSubmit={handleGeneralSubmit}
+                          handleFormChange={handleFormChange} />
 
-            <RightArrow handleClick={handleRightArrowClick} handleSubmit={handleGeneralSubmit}/>
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
         </>
     )
   }
@@ -235,7 +308,7 @@ function App() {
                    formEditingHandler={formEditingHandler} 
                    handleClose={handleEduClose} />
 
-        <RightArrow handleClick={handleRightArrowClick}/>
+        <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
     </>
     )
   }
@@ -257,7 +330,7 @@ function App() {
                   formEditingHandler={formEditingHandler}
                   handleClose={handleWorkClose} />
 
-            <RightArrow handleClick={handleRightArrowClick}/>
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
         </>
     )}
 }
