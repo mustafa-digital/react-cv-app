@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { AddSection } from "./AddSection";
+import { ErrorMessage } from "./ErrorMessage";
 
 export function Education({ eduCount,
                             education,
@@ -11,7 +11,8 @@ export function Education({ eduCount,
                             handleSubmit,
                             handleAddEducationClick,
                             formEditingHandler,
-                            handleClose
+                            handleClose,
+                            handleFormChange
                         }) {
 
     // Creates EducationForm components based on eduCount number, and pushes them unto eduForms array
@@ -28,7 +29,8 @@ export function Education({ eduCount,
                                             handleStudyStartChange={handleStudyStartChange}
                                             handleStudyEndChange={handleStudyEndChange} 
                                             handleSubmit={handleSubmit}
-                                            formEditingHandler={formEditingHandler} 
+                                            formEditingHandler={formEditingHandler}
+                                            handleFormChange={handleFormChange} 
                                             handleClose={handleClose} /> );
         }
 
@@ -61,29 +63,45 @@ function EducationForm({
                         handleStudyEndChange,
                         handleSubmit,
                         formEditingHandler,
-                        handleClose 
+                        handleClose,
+                        handleFormChange 
                     }) {
     index = index.toString();
+    const edu = education.get(index);
+    const schoolName = edu.name;
+    const degree = edu.degree;
+    const titleStudy = edu.title;
+    const studyStart = edu.start;
+    const studyEnd = edu.end;
     return (
         <>
             <button className='close-button' type='button' onClick={handleClose}>&times;</button>
-            <form id='education-form' onSubmit={handleSubmit} onClick={formEditingHandler} data-index={index}>
+            <form id='education-form' 
+                onSubmit={handleSubmit} 
+                onClick={formEditingHandler}
+                onInput={handleFormChange}
+                data-index={index}
+                noValidate >
                 {/* school name input  */}
                 <label> College Name
+                    {!schoolName.isValid && <ErrorMessage message={schoolName.message}/>}
                     <input type='text'
                             name='school-name'
                             placeholder=''
-                            value={education.get(index).name}
-                            onChange={handleSchoolNameChange} />
+                            defaultValue={schoolName.value}
+                            onChange={handleSchoolNameChange} 
+                            required />
                 </label>
 
                 <div className='degree-wrapper'>
                     {/* degree type selection */}
                     <label> Degree
+                        {!degree.isValid && <ErrorMessage message={degree.message}/>}
                         <select name='degree'
                                 id='degree-select'
-                                value={education.get(index).degree} 
-                                onChange={handleDegreeSelectChange} >
+                                defaultValue={degree.value} 
+                                onChange={handleDegreeSelectChange} 
+                                required >
                 
                             <option value=''>Choose your degree</option>
                             <option value='AA'>Associate of Arts</option>
@@ -105,32 +123,41 @@ function EducationForm({
 
                     {/* title of study input */}
                     <label> Title of Study
+                        {!titleStudy.isValid && <ErrorMessage message={titleStudy.message}/>}
                         <input type='text'
                                     name='title-study'
                                     placeholder=''
-                                    value={education.get(index).title}
-                                    onChange={handleTitleStudyChange} />
+                                    defaultValue={titleStudy.value}
+                                    onChange={handleTitleStudyChange} 
+                                    required />
                     </label>
                 </div>
 
                 {/* date of study input */}
                 <div>
-                    <label htmlFor="date-study-start" className='date-study-lbl'>Date of Study</label>
+                    <label htmlFor="date-study-start" className='date-study-lbl'>Date of Study
+                        {!studyStart.isValid && <ErrorMessage message={studyStart.message}/>}
+                    </label>
+
                     <div className="date-inputs-wrapper">
+
                         <input type='date'
                                     name='date-study-start'
                                     id='date-study-start'
                                     placeholder=''
-                                    value={education.get(index).start}
-                                    onChange={handleStudyStartChange} />
+                                    defaultValue={studyStart.value}
+                                    onChange={handleStudyStartChange} 
+                                    required />
                         <span> to </span>
                         <input type='date'
                                     name='date-study-end'
                                     placeholder=''
-                                    value={education.get(index).end}
-                                    onChange={handleStudyEndChange} />
+                                    defaultValue={studyEnd.value}
+                                    onChange={handleStudyEndChange} 
+                                    className='empty-date'/>
                     </div>
                 </div>
+                <button type='submit' className='save-button'>Save</button>
             </form>
         </>
     )

@@ -1,4 +1,5 @@
-import { AddSection } from "./AddSection"
+import { AddSection } from "./AddSection";
+import { ErrorMessage } from "./ErrorMessage";
 
 export function Work({ work,
                        workCount,
@@ -11,7 +12,8 @@ export function Work({ work,
                        handleAddWorkClick,
                        formEditingHandler,
                        handleSubmit,
-                       handleClose }) {
+                       handleClose,
+                       handleFormChange }) {
 
     // Creates WorkForm components based on workCount number, and pushes them unto workForms array
     function getWorkForms() {
@@ -30,7 +32,8 @@ export function Work({ work,
                                       handleSubmit={handleSubmit}
                                       handleAddWorkClick={handleAddWorkClick} 
                                       formEditingHandler={formEditingHandler}
-                                      handleClose={handleClose} /> 
+                                      handleClose={handleClose}
+                                      handleFormChange={handleFormChange} /> 
                         );}
 
         return workForms;
@@ -62,9 +65,18 @@ function WorkForm({    index,
                        handleWorkEndChange,
                        formEditingHandler,
                        handleSubmit,
-                       handleClose
+                       handleClose,
+                       handleFormChange
                   }) {
     index = index.toString();
+    const w = work.get(index);
+    const jobTitle = w.title;
+    const compName = w.company;
+    const compLocation = w.location;
+    const jobDesc = w.description;
+    const jobStart = w.start;
+    const jobEnd = w.end;
+
     return (
         <>
             <button className='close-button' 
@@ -75,61 +87,73 @@ function WorkForm({    index,
 
             <form id='work-form' 
                     onSubmit={handleSubmit} 
-                    onClick={formEditingHandler} 
-                    data-index={index}>
+                    onClick={formEditingHandler}
+                    onInput={handleFormChange} 
+                    data-index={index}
+                    noValidate >
 
                 <label> Position Title
+                    {!jobTitle.isValid && <ErrorMessage message={jobTitle.message}/>}
                     <input  type='text'
                             name='position-title'
                             placeholder=''
-                            value={work.get(index).title}
+                            defaultValue={jobTitle.value}
                             onChange={handleWorkTitleChange} 
                             required />
                 </label>
                 <label> Company Name
+                    {!compName.isValid && <ErrorMessage message={compName.message}/>}
                     <input type='text'
                             name='company-name'
                             placeholder='' 
-                            value={work.get(index).company}
+                            defaultValue={compName.value}
                             onChange={handleCompanyNameChange} 
                             required />
                 </label>
 
                 <label> Location
+                    {!compLocation.isValid && <ErrorMessage message={compLocation.message}/>}
                     <input type='text'
                             name='company-location'
                             placeholder=''
-                            value={work.get(index).location}
-                            onChange={handleCompanyLocationChange}  />
+                            defaultValue={compLocation.value}
+                            onChange={handleCompanyLocationChange}  
+                            required />
                 </label>
 
                 <label> Job Description
+                    {!jobDesc.isValid && <ErrorMessage message={jobDesc.message}/>}
                     <textarea className="job-desc-txtarea"
                               cols='20'
                               rows='15'
                               wrap='hard' 
-                              value={work.get(index).description}
+                              defaultValue={jobDesc.value}
                               onChange={handleWorkDescriptionChange} />
                 </label>
 
                 {/* work duration input */}
                 <div>
-                    <label htmlFor="date-work-start" className='date-study-lbl'>Job Duration</label>
+                    <label htmlFor="date-work-start" className='date-study-lbl'>Job Duration
+                        {!jobStart.isValid && <ErrorMessage message={jobStart.message}/>}
+                    </label>
                     <div className="date-inputs-wrapper">
                         <input type='date'
                                     name='date-work-start'
                                     id='date-work-start'
                                     placeholder=''
-                                    value={work.get(index).start}
-                                    onChange={handleWorkStartChange} />
+                                    defaultValue={jobStart.value}
+                                    onChange={handleWorkStartChange} 
+                                    required />
                         <span> to </span>
                         <input type='date'
                                     name='date-work-end'
                                     placeholder=''
-                                    value={work.get(index).end}
-                                    onChange={handleWorkEndChange}  />
+                                    defaultValue={jobEnd.value}
+                                    onChange={handleWorkEndChange}
+                                    className='empty-date' />
                     </div>
-                </div>   
+                </div>
+                <button type='submit' className='save-button'>Save</button>   
             </form>  
         </>
     )

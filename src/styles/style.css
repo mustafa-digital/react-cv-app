@@ -157,12 +157,18 @@ input {
     align-self: end;
 }
 
+.empty-date {
+    background: transparent;
+    border: 1px solid rgb(118, 118, 118);
+}
+
 .invalid {
     border: 1px solid #b92326;
     background-color: rgba(185, 35, 38, 0.25);
 }
 
-input:valid {
+input:valid:not(.empty-date),
+.valid {
     border: 1px solid #8BC34A;
     background-color: rgba(139, 195, 74, 0.25);
 }

@@ -5,12 +5,16 @@ import { LeftArrow } from './components/LeftArrow';
 import { RightArrow } from './components/RightArrow';
 import { Education } from './components/Education';
 import { Work } from './components/Work';
-import { UnsavedChangesDialog } from './components/UnsavedChangesDialog';
 
 const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
 const EDUCATION = 2;
 const WORK = 3;
+
+const inputTemplateObj = {  value: '',
+                            isValid: true,
+                            message: '' 
+                         }
 
 function App() {
   const [status, setStatus] = useState(WELCOME_PAGE);
@@ -20,13 +24,231 @@ function App() {
   const [phone, setPhone] = useState({ value: '', isValid: true, message: '' });
   const [education, setEducation] = useState(new Map());
   const [eduCount, setEduCount] = useState(0);
-  const [formEditing, setFormEditing] = useState(null);
+  const [formEditing, setFormEditing] = useState(0);
   const [work, setWork] = useState(new Map());
   const [workCount, setWorkCount] = useState(0);
   const [hasChanged, setHasChanged] = useState(false);
 
   const handleFormChange = () => {
     setHasChanged(true);
+  }
+
+  const handleWorkSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const id = form.dataset.index.toString();
+
+    const jobTitleInput = form.querySelector('input[name="position-title"]');
+    const compNameInput = form.querySelector('input[name="company-name"]');
+    const compLocationInput = form.querySelector('input[name="company-location"]');
+    const jobDescInput = form.querySelector('.job-desc-txtarea');
+    const workStartInput = form.querySelector('input[name="date-work-start"]');
+    const workEndInput = form.querySelector('input[name="date-work-end"]');
+
+    if (!workEndInput.value) {
+        workEndInput.classList.add('empty-date');
+    }
+    else {
+        workEndInput.classList.remove('empty-date');
+    }
+
+    if (jobDescInput.value) {
+        jobDescInput.classList.add('valid');
+    }
+
+    const newWork = new Map(work);
+    const newWorkAtIndex = newWork.get(id);
+
+    const jobTitle = newWorkAtIndex.title;
+    if (jobTitleInput.validity.valid) {
+        newWorkAtIndex.title = { ...jobTitle,
+                                        value: jobTitleInput.value,
+                                        isValid: true,
+                                     };
+        jobTitleInput.classList.remove('invalid');
+    } else {
+        newWorkAtIndex.title = { ...jobTitle,
+                                        isValid: false,
+                                        message: 'required'
+                                    };
+        jobTitleInput.classList.add('invalid');
+    }
+
+    const compName = newWorkAtIndex.company;
+    if (compNameInput.validity.valid) {
+        newWorkAtIndex.company = { ...compName, 
+                                    value: compNameInput.value,
+                                    isValid: true,
+                                };
+        compNameInput.classList.remove('invalid');
+    } else {
+        newWorkAtIndex.company = { ...jobTitle,
+                                        isValid: false,
+                                        message: 'required'
+                                    };
+        compNameInput.classList.add('invalid');
+    }
+
+    const compLocation = newWorkAtIndex.location;
+    if (compLocationInput.validity.valid) {
+        newWorkAtIndex.location = { ...compLocation, 
+                                    value: compLocationInput.value,
+                                    isValid: true,
+                                };
+        compLocationInput.classList.remove('invalid');
+    } else {
+        newWorkAtIndex.location = { ...compLocation,
+                                        isValid: false,
+                                        message: 'required'
+                                    };
+        compLocationInput.classList.add('invalid');
+    }
+
+    const workStart = newWorkAtIndex.start;
+    // check the start and end dates, make them invalid if start is after end
+    if ((Date.parse(workStartInput.value)) > (Date.parse(workEndInput.value))) {
+        workStartInput.setCustomValidity('Start date must be before end date');
+        workEndInput.setCustomValidity('Start date must be before end date');
+
+        newWorkAtIndex.start = { ...workStart,
+            isValid: false,
+            message: 'Start date must be before end date'
+        };
+
+        workStartInput.classList.add('invalid');
+        workEndInput.classList.add('invalid');
+        workStartInput.classList.remove('valid');
+        workEndInput.classList.remove('valid');
+    } else { // the dates are not conflicting
+        if (workStartInput.validity.valueMissing) {
+            newWorkAtIndex.start = { ...workStart,
+                isValid: false,
+                message: 'Start date required'
+            };
+            workStartInput.classList.add('invalid');
+            workStartInput.classList.remove('valid');
+            workEndInput.classList.remove('valid');
+        } else {
+            newWorkAtIndex.start = { ...workStart, 
+                value: workStartInput.value,
+                isValid: true,
+            };
+            workStartInput.classList.add('valid');
+            workEndInput.classList.add('valid');
+            workStartInput.classList.remove('invalid');
+            workEndInput.classList.remove('invalid');
+        }
+    }
+
+    setWork(newWork);
+    setHasChanged(false);
+  }
+
+  const handleEducationSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const id = form.dataset.index.toString();
+
+    const schoolNameInput = form.querySelector('input[name="school-name"]');
+    const degreeInput = form.querySelector('select[name="degree"]');
+    const titleStudyInput = form.querySelector('input[name="title-study"]');
+    const studyStartInput = form.querySelector('input[name="date-study-start"]');
+    const studyEndInput = form.querySelector('input[name="date-study-end"]');
+
+    const newEducation = new Map(education);
+    const newEdu = newEducation.get(id);
+
+    if (!studyEndInput.value) {
+        studyEndInput.classList.add('empty-date');
+    }
+    else {
+        studyEndInput.classList.remove('empty-date');
+    }
+
+    const schoolName = newEdu.name;
+    if (schoolNameInput.validity.valid) {
+        newEdu.name = { ...schoolName,
+                                        value: schoolNameInput.value,
+                                        isValid: true,
+                                     };
+        schoolNameInput.classList.remove('invalid');
+    } else {
+        newEdu.name = { ...schoolName,
+                                        isValid: false,
+                                        message: 'required'
+                                    };
+        schoolNameInput.classList.add('invalid');
+    }
+
+    const degree = newEdu.degree;
+    if (degreeInput.validity.valid) {
+        newEdu.degree = { ...degree,
+                                        value: degreeInput.value,
+                                        isValid: true,
+                                     };
+        degreeInput.classList.add('valid');
+        degreeInput.classList.remove('invalid');
+    } else {
+        newEdu.degree = { ...degree,
+                                        isValid: false,
+                                        message: 'required'
+                                    };
+        degreeInput.classList.remove('valid');
+        degreeInput.classList.add('invalid');
+    }
+
+    const titleStudy = newEdu.title;
+    if (titleStudyInput.validity.valid) {
+        newEdu.title = { ...titleStudy,
+                                        value: titleStudyInput.value,
+                                        isValid: true,
+                                     };
+        titleStudyInput.classList.remove('invalid');
+    } else {
+        newEdu.title = { ...titleStudy,
+                                        isValid: false,
+                                        message: 'required'
+                                    };
+        titleStudyInput.classList.add('invalid');
+    }
+
+    const studyStart = newEdu.start;
+
+    if ((Date.parse(studyStartInput.value)) > (Date.parse(studyEndInput.value))) {
+        studyStartInput.setCustomValidity('Start date must be before end date');
+        studyEndInput.setCustomValidity('Start date must be before end date');
+        newEdu.start = { ...studyStart,
+            isValid: false,
+            message: 'Start date must be before end date'
+        };
+
+        studyStartInput.classList.add('invalid');
+        studyEndInput.classList.add('invalid');
+        studyStartInput.classList.remove('valid');
+        studyEndInput.classList.remove('valid');
+    } else {
+        if (studyStartInput.validity.valueMissing) {
+            newEdu.start = { ...studyStart,
+                            isValid: false,
+                            message: 'Start date required'
+                           };
+            studyStartInput.classList.add('invalid');
+            studyStartInput.classList.remove('valid');
+            studyEndInput.classList.remove('valid');
+        } else {
+            newEdu.start = { ...studyStart,
+                value: studyStartInput.value,
+                isValid: true,
+             };
+             studyStartInput.classList.remove('invalid');
+             studyEndInput.classList.remove('invalid');
+             studyStartInput.classList.add('valid');
+             studyEndInput.classList.add('valid');
+        }
+    }
+    
+    setEducation(newEducation);
+    setHasChanged(false);
   }
 
   const handleGeneralSubmit = (e) => {
@@ -127,50 +349,62 @@ function App() {
 
   const handleAddWorkClick = () => {
     setWorkCount(workCount + 1);
-    let newWork = work.set(workCount.toString(), { title: '',
-                                                   company: '',
-                                                   location: '',
-                                                   description: '',
-                                                   start: '',
-                                                   end: ''
+    let newWork = work.set(workCount.toString(), { title: {...inputTemplateObj},
+                                                   company: {...inputTemplateObj},
+                                                   location: {...inputTemplateObj},
+                                                   description: {...inputTemplateObj},
+                                                   start: {...inputTemplateObj},
+                                                   end: {...inputTemplateObj}
                                                  });
     setWork(newWork);
   }
 
   const handleWorkTitleChange = (e) => {
-    let newWork = new Map(work);
-    newWork.get(formEditing.toString()).title = e.target.value;
-    setWork(newWork);
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing.toString()).title.isValid = true;
+        setWork(newWork);
+    }
   }
 
   const handleCompanyNameChange = (e) => {
-    let newWork = new Map(work);
-    newWork.get(formEditing.toString()).company = e.target.value;
-    setWork(newWork);
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing.toString()).company.isValid = true;
+        setWork(newWork);
+    }
   }
 
   const handleCompanyLocationChange = (e) => {
-    let newWork = new Map(work);
-    newWork.get(formEditing.toString()).location = e.target.value;
-    setWork(newWork);
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing.toString()).location.isValid = true;
+        setWork(newWork);
+    }
   }
 
   const handleWorkDescriptionChange = (e) => {
-    let newWork = new Map(work);
-    newWork.get(formEditing.toString()).description = e.target.value;
-    setWork(newWork);
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing.toString()).description.isValid = true;
+        setWork(newWork);
+    }
   }
 
   const handleWorkStartChange = (e) => {
-    let newWork = new Map(work);
-    newWork.get(formEditing.toString()).start = e.target.value;
-    setWork(newWork);
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing.toString()).start.isValid = true;
+        setWork(newWork);
+    }
   }
 
   const handleWorkEndChange = (e) => {
-    let newWork = new Map(work);
-    newWork.get(formEditing.toString()).end = e.target.value;
-    setWork(newWork);
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing.toString()).end.isValid = true;
+        setWork(newWork);
+    }
   }
 
   const formEditingHandler = (e) => {
@@ -179,44 +413,54 @@ function App() {
 
   const handleAddEducationClick = () => {
     setEduCount(eduCount + 1);
-    let newEducation = education.set(eduCount.toString(), { name: '',
-                                                            degree: '',
-                                                            title: '',
-                                                            start: '',
-                                                            end: '' 
+    let newEducation = education.set(eduCount.toString(), { name: {...inputTemplateObj},
+                                                            degree: {...inputTemplateObj},
+                                                            title: {...inputTemplateObj},
+                                                            start: {...inputTemplateObj},
+                                                            end: {...inputTemplateObj} 
                                                         });
 
     setEducation(newEducation);
   }
   
   const handleSchoolNameChange = (e) => {
-    let newEducation = new Map(education);
-    newEducation.get(formEditing.toString()).name = e.target.value;
-    setEducation(newEducation);
+    if (e.target.checkValidity()) {
+        let newEducation = new Map(education);
+        newEducation.get(formEditing.toString()).name.isValid = true;
+        setEducation(newEducation);
+    }
   }
 
   const handleDegreeSelectChange = (e) => {
-    let newEducation = new Map(education);
-    newEducation.get(formEditing.toString()).degree = e.target.value;
-    setEducation(newEducation);
+    if (e.target.checkValidity()) {
+        let newEducation = new Map(education);
+        newEducation.get(formEditing.toString()).degree.isValid = true;
+        setEducation(newEducation);
+    }
   }
 
   const handleTitleStudyChange = (e) => {
-    let newEducation = new Map(education);
-    newEducation.get(formEditing.toString()).title = e.target.value;
-    setEducation(newEducation);
+    if (e.target.checkValidity()) {
+        let newEducation = new Map(education);
+        newEducation.get(formEditing.toString()).title.isValid = true;
+        setEducation(newEducation);
+    }
   }
 
   const handleStudyStartChange = (e) => {
-    let newEducation = new Map(education);
-    newEducation.get(formEditing.toString()).start = e.target.value;
-    setEducation(newEducation);
+    if (e.target.checkValidity()) {
+        let newEducation = new Map(education);
+        newEducation.get(formEditing.toString()).start.isValid = true;
+        setEducation(newEducation);
+    }
   }
 
   const handleStudyEndChange = (e) => {
-    let newEducation = new Map(education);
-    newEducation.get(formEditing.toString()).end = e.target.value;
-    setEducation(newEducation);
+    if (e.target.checkValidity()) {
+        let newEducation = new Map(education);
+        newEducation.get(formEditing.toString()).end.isValid = true;
+        setEducation(newEducation);
+    }
   }
 
   const handleFirstNameChange = (e) => {
@@ -247,11 +491,6 @@ function App() {
     }
   }
 
-  const handleSubmit = () => {
-    // e.preventDefault();
-    console.log('submitted');
-  }
-
   const handleRightArrowClick = () => {
     setHasChanged(false);
     setStatus(status + 1);
@@ -274,7 +513,7 @@ function App() {
   else if (status === GENERAL_INFO) {
     return (
         <>
-            <LeftArrow handleClick={handleLeftArrowClick}/>
+            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={hasChanged} />
 
             <GeneralInfo  firstName={firstName}
                           lastName={lastName}
@@ -294,7 +533,7 @@ function App() {
   else if (status === EDUCATION) {
     return (
         <>
-        <LeftArrow handleClick={handleLeftArrowClick}/>
+        <LeftArrow handleClick={handleLeftArrowClick} hasChanged={hasChanged} />
 
         <Education education={education}
                    eduCount={eduCount}
@@ -303,10 +542,11 @@ function App() {
                    handleTitleStudyChange={handleTitleStudyChange}
                    handleStudyStartChange={handleStudyStartChange}
                    handleStudyEndChange={handleStudyEndChange} 
-                   handleSubmit={handleSubmit}
+                   handleSubmit={handleEducationSubmit}
                    handleAddEducationClick={handleAddEducationClick}
                    formEditingHandler={formEditingHandler} 
-                   handleClose={handleEduClose} />
+                   handleClose={handleEduClose}
+                   handleFormChange={handleFormChange} />
 
         <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
     </>
@@ -315,7 +555,7 @@ function App() {
   else if (status === WORK) {
     return(
         <>
-            <LeftArrow handleClick={handleLeftArrowClick}/>
+            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={hasChanged} />
 
             <Work work={work}
                   workCount={workCount}
@@ -325,10 +565,11 @@ function App() {
                   handleWorkDescriptionChange={handleWorkDescriptionChange}
                   handleWorkStartChange={handleWorkStartChange}
                   handleWorkEndChange={handleWorkEndChange}
-                  handleSubmit={handleSubmit}
+                  handleSubmit={handleWorkSubmit}
                   handleAddWorkClick={handleAddWorkClick} 
                   formEditingHandler={formEditingHandler}
-                  handleClose={handleWorkClose} />
+                  handleClose={handleWorkClose} 
+                  handleFormChange={handleFormChange} />
 
             <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
         </>

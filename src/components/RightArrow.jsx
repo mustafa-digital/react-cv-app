@@ -4,23 +4,17 @@ import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 
 export function RightArrow({ title='Move next', handleClick, hasChanged}) {
     const [showModal, setShowModal] = useState(false);
-    const [leavePage, setLeavePage] = useState(false);
-
-    if (leavePage) {
-        handleClick();
-        setLeavePage(false);
-    }
+    
     return (
         <>
             <button type='submit'
                     className='nav-btn right'
                     title={title}
                     onClick={() => {
-                        if (hasChanged && !leavePage) {
+                        if (hasChanged) {
                             setShowModal(true);
                         } else {
                             handleClick();
-                            setLeavePage(false);
                         }
                     }}>
                     
@@ -32,12 +26,11 @@ export function RightArrow({ title='Move next', handleClick, hasChanged}) {
                 <UnsavedChangesDialog
                     onClose={() => setShowModal(false)}
                     stayOnPage={() => {
-                        setLeavePage(false);
                         setShowModal(false);
                     }}
                     leavePage={() => {
-                        setLeavePage(true);
                         setShowModal(false);
+                        handleClick();
                     }} />,
                 document.body
             )}
