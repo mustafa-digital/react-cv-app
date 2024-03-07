@@ -36,18 +36,6 @@ function App() {
     setStatus(page);
   }
 
-  const handleWorkEdit = () => {
-    setStatus(EDUCATION);
-  }
-
-  const handleEducationEdit = () => {
-    setStatus(EDUCATION);
-  }
-
-  const handleGeneralEdit = () => {
-    setStatus(GENERAL_INFO);
-  }
-
   const handleFormChange = () => {
     setUnsavedChange(true);
   }
@@ -56,13 +44,16 @@ function App() {
     e.preventDefault();
     const form = e.target;
     const id = Number(form.dataset.index);
-
     const jobTitleInput = form.querySelector('input[name="position-title"]');
     const compNameInput = form.querySelector('input[name="company-name"]');
     const compLocationInput = form.querySelector('input[name="company-location"]');
     const jobDescInput = form.querySelector('.job-desc-txtarea');
     const workStartInput = form.querySelector('input[name="date-work-start"]');
     const workEndInput = form.querySelector('input[name="date-work-end"]');
+
+    const newWork = new Map(work);
+    const newWorkAtIndex = newWork.get(id);
+    let allValid = true;
 
     if (workEndInput.value !== '') {
         workEndInput.classList.add('empty-date');
@@ -75,8 +66,13 @@ function App() {
         jobDescInput.classList.add('valid');
     }
 
-    const newWork = new Map(work);
-    const newWorkAtIndex = newWork.get(id);
+    const jobDesc = newWorkAtIndex.description;
+    newWorkAtIndex.description = {...jobDesc,
+                                     value: jobDescInput.value,
+                                     isValid: true
+                                 };
+
+
 
     const jobTitle = newWorkAtIndex.title;
     if (jobTitleInput.validity.valid) {
@@ -91,6 +87,7 @@ function App() {
                                         message: 'required'
                                     };
         jobTitleInput.classList.add('invalid');
+        allValid = false;
     }
 
     const compName = newWorkAtIndex.company;
@@ -106,6 +103,7 @@ function App() {
                                         message: 'required'
                                     };
         compNameInput.classList.add('invalid');
+        allValid = false;
     }
 
     const compLocation = newWorkAtIndex.location;
@@ -121,6 +119,7 @@ function App() {
                                         message: 'required'
                                     };
         compLocationInput.classList.add('invalid');
+        allValid = false;
     }
 
     const workStart = newWorkAtIndex.start;
@@ -139,6 +138,7 @@ function App() {
         workEndInput.classList.add('invalid');
         workStartInput.classList.remove('valid');
         workEndInput.classList.remove('valid');
+        allValid = false;
     } else { // the dates are not conflicting
         if (workStartInput.validity.valueMissing) {
             newWorkAtIndex.start = { ...workStart,
@@ -148,6 +148,7 @@ function App() {
             workStartInput.classList.add('invalid');
             workStartInput.classList.remove('valid');
             workEndInput.classList.remove('valid');
+            allValid = false;
         } else {
             newWorkAtIndex.start = { ...workStart, 
                 value: workStartInput.value,
@@ -166,6 +167,7 @@ function App() {
         }
     }
 
+    newWorkAtIndex.isValid = allValid;
     setWork(newWork);
     setUnsavedChange(false);
   }
@@ -388,13 +390,13 @@ function App() {
   const handleAddWorkClick = () => {
     const newWork = new Map(work);
     newWork.set(work.size, { title: {...inputTemplateObj},
-                                                   company: {...inputTemplateObj},
-                                                   location: {...inputTemplateObj},
-                                                   description: {...inputTemplateObj},
-                                                   start: {...inputTemplateObj},
-                                                   end: {...inputTemplateObj},
-                                                   isValid: true
-                                                 });                                         
+                             company: {...inputTemplateObj},
+                             location: {...inputTemplateObj},
+                             description: {...inputTemplateObj},
+                             start: {...inputTemplateObj},
+                             end: {...inputTemplateObj},
+                             isValid: false
+                            });                                         
     setWork(newWork);
   }
 
@@ -622,16 +624,17 @@ function App() {
             }
         }
 
-        // let workIsValid = true;
-        // for(const [id, work] of work.entries()) {
-        //     console.log(id);
-        //     if (!work.isValid) {
-        //         workIsValid = false;
-        //         break;
-        //     }
-        // }
-
-        const validForms = (generalInfo.isValid && educationIsValid);
+        let workIsValid = true;
+        for(const [id, wrk] of work.entries()) {
+            console.log(wrk);
+            if (!wrk.isValid) {
+                workIsValid = false;
+                break;
+            }
+        }
+        console.log({workIsValid});
+        const validForms = (generalInfo.isValid && educationIsValid && workIsValid);
+        console.log({validForms});
         return (
             <>
                 <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
@@ -639,7 +642,10 @@ function App() {
                 <h1>Review Information</h1>
 
                 {(!validForms) &&
-                    <InvalidForms generalInfo={generalInfo} education={education} work={work} handlePageChange={handlePageChange}/> 
+                    <InvalidForms generalIsValid={generalInfo.isValid} 
+                                  educationIsValid={educationIsValid} 
+                                  workIsValid={workIsValid} 
+                                  handlePageChange={handlePageChange}/> 
                 }
                 
                 {/* {validForms && 

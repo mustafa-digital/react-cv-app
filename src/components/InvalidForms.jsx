@@ -1,4 +1,4 @@
-export function InvalidForms({ generalInfo, education, work, handlePageChange}) {
+export function InvalidForms({ generalIsValid, educationIsValid, workIsValid, handlePageChange}) {
 
     const imageStyle = {
         width: '32px',
@@ -26,15 +26,15 @@ export function InvalidForms({ generalInfo, education, work, handlePageChange}) 
     return (
         <section className="section-border warning-section">
             <h3>Some of the information is incomplete. Please re-check the forms by clicking the links.</h3>
-            {!generalInfo.isValid && 
+            {!generalIsValid && 
                 <Warning formName={'General Info'} page={GENERAL_INFO} />
             }
 
-            {education.size > 0 && !education.isValid && 
+            {!educationIsValid && 
                 <Warning formName={'Education'} page={EDUCATION} />
             }
 
-            {work.size > 0 && !work.isValid && 
+            {!workIsValid && 
                 <Warning formName={'Work'} page={WORK} />
             }
         </section>
