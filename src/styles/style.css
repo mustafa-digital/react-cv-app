@@ -216,3 +216,30 @@ input:focus {
 .check-mark-icon {
     height: 100px;
 }
+
+.warning-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-invalid-warning {
+    display: flex;
+    justify-content: center;
+}
+
+.form-invalid-warning  p {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-invalid-span {
+    color:#386bff;
+    cursor: pointer;
+}
+
+.review-button-invalid {
+    width: 55px;
+    height: 32px;
+}

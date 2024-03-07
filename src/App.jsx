@@ -5,6 +5,7 @@ import { LeftArrow } from './components/LeftArrow';
 import { RightArrow } from './components/RightArrow';
 import { Education } from './components/Education';
 import { Work } from './components/Work';
+import { InvalidForms } from './components/InvalidForms';
 
 const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
@@ -30,6 +31,18 @@ function App() {
   const [formEditing, setFormEditing] = useState(0);
   const [work, setWork] = useState(new Map());
   const [unsavedChange, setUnsavedChange] = useState(false);
+
+  const handlePageChange = (page) => {
+    setStatus(page);
+  }
+
+  const handleWorkEdit = () => {
+    setStatus(EDUCATION);
+  }
+
+  const handleEducationEdit = () => {
+    setStatus(EDUCATION);
+  }
 
   const handleGeneralEdit = () => {
     setStatus(GENERAL_INFO);
@@ -170,6 +183,7 @@ function App() {
 
     const newEducation = new Map(education);
     const newEdu = newEducation.get(id);
+    let allValid = true;
 
     if (!studyEndInput.value !== '') {
         studyEndInput.classList.add('empty-date');
@@ -190,6 +204,7 @@ function App() {
                                         isValid: false,
                                         message: 'required'
                                     };
+        allValid = false;
         schoolNameInput.classList.add('invalid');
     }
 
@@ -206,6 +221,7 @@ function App() {
                                         isValid: false,
                                         message: 'required'
                                     };
+        allValid = false;
         degreeInput.classList.remove('valid');
         degreeInput.classList.add('invalid');
     }
@@ -223,6 +239,7 @@ function App() {
                                         message: 'required'
                                     };
         titleStudyInput.classList.add('invalid');
+        allValid = false;
     }
 
     const studyStart = newEdu.start;
@@ -240,6 +257,7 @@ function App() {
         studyEndInput.classList.add('invalid');
         studyStartInput.classList.remove('valid');
         studyEndInput.classList.remove('valid');
+        allValid = false;
     } else {
         if (studyStartInput.validity.valueMissing) {
             newEdu.start = { ...studyStart,
@@ -249,6 +267,7 @@ function App() {
             studyStartInput.classList.add('invalid');
             studyStartInput.classList.remove('valid');
             studyEndInput.classList.remove('valid');
+            allValid = false;
         } else {
             newEdu.start = { ...studyStart,
                 value: studyStartInput.value,
@@ -266,7 +285,8 @@ function App() {
              studyEndInput.classList.add('valid');
         }
     }
-    
+
+    newEdu.isValid = allValid;
     setEducation(newEducation);
     setUnsavedChange(false);
   }
@@ -437,7 +457,7 @@ function App() {
                                                             title: {...inputTemplateObj},
                                                             start: {...inputTemplateObj},
                                                             end: {...inputTemplateObj},
-                                                            isValid: true 
+                                                            isValid: false 
                                                         });
 
     setEducation(newEducation);
@@ -595,7 +615,7 @@ function App() {
     )}
     else if (status === REVIEW) {
         let educationIsValid = true;
-        for(const [id, edu] of education.entries()) {
+        for (const [id, edu] of education.entries()) {
             if (!edu.isValid){
                 educationIsValid = false;
                 break;
@@ -618,20 +638,26 @@ function App() {
                 <div className='review-section'>
                 <h1>Review Information</h1>
 
-                {generalInfo.isValid ?
-                                <GeneralInfo  generalInfo={generalInfo}
-                                handleFirstNameChange={handleFirstNameChange}
-                                handleLastNameChange={handleLastNameChange}
-                                handleEmailChange={handleEmailChange}
-                                handlePhoneChange={handlePhoneChange} 
-                                handleSubmit={handleGeneralSubmit}
-                                handleFormChange={handleFormChange}
-                                handleGeneralEdit={handleGeneralEdit}
-                                review={true} /> 
-                
-                    : <p>General Info has invalid information</p>  
+                {(!validForms) &&
+                    <InvalidForms generalInfo={generalInfo} education={education} work={work} handlePageChange={handlePageChange}/> 
                 }
-                {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
+                
+                {/* {validForms && 
+                
+                    generalInfo.isValid ?
+                                    <GeneralInfo  generalInfo={generalInfo}
+                                    handleFirstNameChange={handleFirstNameChange}
+                                    handleLastNameChange={handleLastNameChange}
+                                    handleEmailChange={handleEmailChange}
+                                    handlePhoneChange={handlePhoneChange} 
+                                    handleSubmit={handleGeneralSubmit}
+                                    handleFormChange={handleFormChange}
+                                    handleGeneralEdit={handleGeneralEdit}
+                                    review={true} /> 
+                    
+                        : <p>General Info has invalid information</p>  
+                }
+                {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>} */}
 
                 </div>
 
