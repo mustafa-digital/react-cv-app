@@ -1,8 +1,7 @@
 import { AddSection } from "./AddSection";
 import { ErrorMessage } from "./ErrorMessage";
 
-export function Education({ eduCount,
-                            education,
+export function Education({ education,
                             handleSchoolNameChange,
                             handleDegreeSelectChange,
                             handleTitleStudyChange,
@@ -15,13 +14,13 @@ export function Education({ eduCount,
                             handleFormChange
                         }) {
 
-    // Creates EducationForm components based on eduCount number, and pushes them unto eduForms array
+    // Creates EducationForm components based on education size, and pushes them unto eduForms array
     function getEduForms() {
         let eduForms = [];
 
-        for (let i = 0; i < eduCount; i++) {
+        for (let i = 0; i < education.size; i++) {
             eduForms.push( <EducationForm 
-                                            index={i.toString()} 
+                                            index={i} 
                                             education={education}
                                             handleSchoolNameChange={handleSchoolNameChange}
                                             handleDegreeSelectChange={handleDegreeSelectChange}
@@ -66,7 +65,6 @@ function EducationForm({
                         handleClose,
                         handleFormChange 
                     }) {
-    index = index.toString();
     const edu = education.get(index);
     const schoolName = edu.name;
     const degree = edu.degree;
@@ -100,7 +98,8 @@ function EducationForm({
                         <select name='degree'
                                 id='degree-select'
                                 defaultValue={degree.value} 
-                                onChange={handleDegreeSelectChange} 
+                                onChange={handleDegreeSelectChange}
+                                className={degree.value ? 'valid' : ''} 
                                 required >
                 
                             <option value=''>Choose your degree</option>
@@ -154,7 +153,7 @@ function EducationForm({
                                     placeholder=''
                                     defaultValue={studyEnd.value}
                                     onChange={handleStudyEndChange} 
-                                    className='empty-date'/>
+                                    className={studyEnd.value ? '' : 'empty-date'} />
                     </div>
                 </div>
                 <button type='submit' className='save-button'>Save</button>

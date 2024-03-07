@@ -10,6 +10,8 @@ const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
 const EDUCATION = 2;
 const WORK = 3;
+const REVIEW = 4;
+const SUBMITTED = 5;
 
 const inputTemplateObj = {  value: '',
                             isValid: true,
@@ -18,25 +20,29 @@ const inputTemplateObj = {  value: '',
 
 function App() {
   const [status, setStatus] = useState(WELCOME_PAGE);
-  const [firstName, setFirstName] = useState({ value: '', isValid: true, message: '' });
-  const [lastName, setLastName] = useState({ value: '', isValid: true, message: '' });
-  const [email, setEmail] = useState({ value: '', isValid: true, message: '' });
-  const [phone, setPhone] = useState({ value: '', isValid: true, message: '' });
+  const [generalInfo, setGeneralInfo] = useState({  firstName: {...inputTemplateObj},
+                                                    lastName: {...inputTemplateObj},
+                                                    email: {...inputTemplateObj},
+                                                    phone: {...inputTemplateObj},
+                                                    isValid: null 
+                                                });
   const [education, setEducation] = useState(new Map());
-  const [eduCount, setEduCount] = useState(0);
   const [formEditing, setFormEditing] = useState(0);
   const [work, setWork] = useState(new Map());
-  const [workCount, setWorkCount] = useState(0);
-  const [hasChanged, setHasChanged] = useState(false);
+  const [unsavedChange, setUnsavedChange] = useState(false);
+
+  const handleGeneralEdit = () => {
+    setStatus(GENERAL_INFO);
+  }
 
   const handleFormChange = () => {
-    setHasChanged(true);
+    setUnsavedChange(true);
   }
 
   const handleWorkSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
-    const id = form.dataset.index.toString();
+    const id = Number(form.dataset.index);
 
     const jobTitleInput = form.querySelector('input[name="position-title"]');
     const compNameInput = form.querySelector('input[name="company-name"]');
@@ -45,7 +51,7 @@ function App() {
     const workStartInput = form.querySelector('input[name="date-work-start"]');
     const workEndInput = form.querySelector('input[name="date-work-end"]');
 
-    if (!workEndInput.value) {
+    if (workEndInput.value !== '') {
         workEndInput.classList.add('empty-date');
     }
     else {
@@ -82,7 +88,7 @@ function App() {
                                 };
         compNameInput.classList.remove('invalid');
     } else {
-        newWorkAtIndex.company = { ...jobTitle,
+        newWorkAtIndex.company = { ...compName,
                                         isValid: false,
                                         message: 'required'
                                     };
@@ -105,6 +111,7 @@ function App() {
     }
 
     const workStart = newWorkAtIndex.start;
+    const workEnd = newWorkAtIndex.end;
     // check the start and end dates, make them invalid if start is after end
     if ((Date.parse(workStartInput.value)) > (Date.parse(workEndInput.value))) {
         workStartInput.setCustomValidity('Start date must be before end date');
@@ -133,6 +140,12 @@ function App() {
                 value: workStartInput.value,
                 isValid: true,
             };
+
+            newWorkAtIndex.end = { ...workEnd, 
+                value: workEndInput.value,
+                isValid: true,
+            };
+
             workStartInput.classList.add('valid');
             workEndInput.classList.add('valid');
             workStartInput.classList.remove('invalid');
@@ -141,13 +154,13 @@ function App() {
     }
 
     setWork(newWork);
-    setHasChanged(false);
+    setUnsavedChange(false);
   }
 
   const handleEducationSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
-    const id = form.dataset.index.toString();
+    const id = Number(form.dataset.index);
 
     const schoolNameInput = form.querySelector('input[name="school-name"]');
     const degreeInput = form.querySelector('select[name="degree"]');
@@ -158,7 +171,7 @@ function App() {
     const newEducation = new Map(education);
     const newEdu = newEducation.get(id);
 
-    if (!studyEndInput.value) {
+    if (!studyEndInput.value !== '') {
         studyEndInput.classList.add('empty-date');
     }
     else {
@@ -213,6 +226,7 @@ function App() {
     }
 
     const studyStart = newEdu.start;
+    const studyEnd = newEdu.end;
 
     if ((Date.parse(studyStartInput.value)) > (Date.parse(studyEndInput.value))) {
         studyStartInput.setCustomValidity('Start date must be before end date');
@@ -240,6 +254,12 @@ function App() {
                 value: studyStartInput.value,
                 isValid: true,
              };
+
+             newEdu.end = { ...studyEnd,
+                value: studyEndInput.value,
+                isValid: true,
+             };
+
              studyStartInput.classList.remove('invalid');
              studyEndInput.classList.remove('invalid');
              studyStartInput.classList.add('valid');
@@ -248,7 +268,7 @@ function App() {
     }
     
     setEducation(newEducation);
-    setHasChanged(false);
+    setUnsavedChange(false);
   }
 
   const handleGeneralSubmit = (e) => {
@@ -260,70 +280,69 @@ function App() {
     const emailInput = document.querySelector('input[name="email"]');
     const phoneInput = document.querySelector('input[name="phone"]');
 
+    const newInfo = {...generalInfo}
+    newInfo.isValid = true;
 
     if (firstNameInput.validity.valid) {
-        const newName = { ...firstName, value: formData.get('first-name'), isValid: true, message: '' }
-        setFirstName(newName);
+        newInfo.firstName = { ...generalInfo.firstName, value: formData.get('first-name'), isValid: true, message: '' }
         firstNameInput.classList.remove('invalid');
     } else {
-        const newName = { ...firstName, isValid: false, message: 'required' }
-        setFirstName(newName);
+        newInfo.firstName = { ...generalInfo.firstName, value: '', isValid: false, message: 'required' }
         firstNameInput.classList.add('invalid');
+        newInfo.isValid = false;
     }
 
     if (lastNameInput.validity.valid) {
-        const newName = { ...lastName, value: formData.get('last-name'), isValid: true, message: '' }
-        setLastName(newName);    
+        newInfo.lastName = { ...generalInfo.lastName, value: formData.get('last-name'), isValid: true, message: '' }
         lastNameInput.classList.remove('invalid');
     } else {
-        const newName = { ...lastName, isValid: false, message: 'required' }
-        setLastName(newName);
+        newInfo.lastName = { ...generalInfo.lastName, value: '', isValid: false, message: 'required' }
         lastNameInput.classList.add('invalid');
+        newInfo.isValid = false;
     }
 
     if (emailInput.validity.valid) {
-        const newEmail = { ...email, value: formData.get('email'), isValid: true, message: '' }
-        setEmail(newEmail);
+        newInfo.email = { ...generalInfo.email, value: formData.get('email'), isValid: true, message: '' }
         emailInput.classList.remove('invalid');
     } else {
-        const newEmail = { ...email, isValid: false }
-        if (emailInput.validity.valueMissing) { newEmail.message = 'required'; } 
-        else if (emailInput.validity.typeMismatch) { newEmail.message = 'not a valid email' }
+        newInfo.email = { ...generalInfo.email, value: '', isValid: false }
+        if (emailInput.validity.valueMissing) { newInfo.email.message = 'required'; } 
+        else if (emailInput.validity.typeMismatch) { newInfo.email.message = 'not a valid email' }
 
-        setEmail(newEmail);
+        newInfo.isValid = false;
         emailInput.classList.add('invalid');
     }
 
     if (phoneInput.validity.valid) {
-        const newPhone = { ...phone, value: formData.get('phone'), isValid: true, message: '' }
-        setPhone(newPhone);
+        newInfo.phone = { ...generalInfo.phone, value: formData.get('phone'), isValid: true, message: '' }
         phoneInput.classList.remove('invalid');
     } else {
-        const newPhone = { ...phone, isValid: false}
-        if (phoneInput.validity.valueMissing) { newPhone.message = 'required'; } 
-        else if (phoneInput.validity.patternMismatch) { newPhone.message = 'format: 555-555-5555' }
+        newInfo.phone = { ...generalInfo.phone, value: '', isValid: false}
+        if (phoneInput.validity.valueMissing) { newInfo.phone.message = 'required'; } 
+        else if (phoneInput.validity.patternMismatch) { newInfo.phone.message = 'format: 555-555-5555' }
 
-        setPhone(newPhone);
+        newInfo.isValid = false;
         phoneInput.classList.add('invalid');
     }
-    setHasChanged(false);
+
+    setGeneralInfo(newInfo);
+    setUnsavedChange(false);
   }
 
   /* handler for close button on education forms
      removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
   */
   const handleEduClose = (e) => {
-    let indexToDelete = e.target.nextSibling.dataset.index;
+    let indexToDelete = Number(e.target.nextSibling.dataset.index);
     let newEdu = new Map();
     for (const [index, edu] of education.entries()){
         if (index > indexToDelete){
-            newEdu.set((index - 1).toString(), edu);
+            newEdu.set((index - 1), edu);
         }
-        else if (index < Number(indexToDelete)){
-            newEdu.set(index.toString(), edu);
+        else if (index < indexToDelete){
+            newEdu.set(index, edu);
         }
     }
-    setEduCount(eduCount - 1);
     setEducation(newEdu);
     setFormEditing(0);
   }
@@ -332,37 +351,37 @@ function App() {
      removes the entry from work map, reduces the work count, and moves entries with indices higher than the deleted index up one place 
   */
   const handleWorkClose = (e) => {
-    let indexToDelete = e.target.nextSibling.dataset.index;
+    let indexToDelete = Number(e.target.nextSibling.dataset.index);
     let newWork = new Map();
     for (const [index, job] of work.entries()){
         if (index > indexToDelete){
-            newWork.set((index - 1).toString(), job);
+            newWork.set((index - 1), job);
         }
-        else if (index < Number(indexToDelete)){
-            newWork.set(index.toString(), job);
+        else if (index < indexToDelete){
+            newWork.set(index, job);
         }
     }
-    setWorkCount(workCount - 1);
     setWork(newWork);
     setFormEditing(0);
   }
 
   const handleAddWorkClick = () => {
-    setWorkCount(workCount + 1);
-    let newWork = work.set(workCount.toString(), { title: {...inputTemplateObj},
+    const newWork = new Map(work);
+    newWork.set(work.size, { title: {...inputTemplateObj},
                                                    company: {...inputTemplateObj},
                                                    location: {...inputTemplateObj},
                                                    description: {...inputTemplateObj},
                                                    start: {...inputTemplateObj},
-                                                   end: {...inputTemplateObj}
-                                                 });
+                                                   end: {...inputTemplateObj},
+                                                   isValid: true
+                                                 });                                         
     setWork(newWork);
   }
 
   const handleWorkTitleChange = (e) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
-        newWork.get(formEditing.toString()).title.isValid = true;
+        newWork.get(formEditing).title.isValid = true;
         setWork(newWork);
     }
   }
@@ -370,7 +389,7 @@ function App() {
   const handleCompanyNameChange = (e) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
-        newWork.get(formEditing.toString()).company.isValid = true;
+        newWork.get(formEditing).company.isValid = true;
         setWork(newWork);
     }
   }
@@ -378,7 +397,7 @@ function App() {
   const handleCompanyLocationChange = (e) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
-        newWork.get(formEditing.toString()).location.isValid = true;
+        newWork.get(formEditing).location.isValid = true;
         setWork(newWork);
     }
   }
@@ -386,7 +405,7 @@ function App() {
   const handleWorkDescriptionChange = (e) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
-        newWork.get(formEditing.toString()).description.isValid = true;
+        newWork.get(formEditing).description.isValid = true;
         setWork(newWork);
     }
   }
@@ -394,7 +413,7 @@ function App() {
   const handleWorkStartChange = (e) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
-        newWork.get(formEditing.toString()).start.isValid = true;
+        newWork.get(formEditing).start.isValid = true;
         setWork(newWork);
     }
   }
@@ -402,22 +421,23 @@ function App() {
   const handleWorkEndChange = (e) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
-        newWork.get(formEditing.toString()).end.isValid = true;
+        newWork.get(formEditing).end.isValid = true;
         setWork(newWork);
     }
   }
 
   const formEditingHandler = (e) => {
-    setFormEditing(e.target.closest('form').dataset.index);
+    setFormEditing(Number(e.target.closest('form').dataset.index));
   }
 
   const handleAddEducationClick = () => {
-    setEduCount(eduCount + 1);
-    let newEducation = education.set(eduCount.toString(), { name: {...inputTemplateObj},
+    const newEducation = new Map(education);
+    newEducation.set(education.size, { name: {...inputTemplateObj},
                                                             degree: {...inputTemplateObj},
                                                             title: {...inputTemplateObj},
                                                             start: {...inputTemplateObj},
-                                                            end: {...inputTemplateObj} 
+                                                            end: {...inputTemplateObj},
+                                                            isValid: true 
                                                         });
 
     setEducation(newEducation);
@@ -426,7 +446,7 @@ function App() {
   const handleSchoolNameChange = (e) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
-        newEducation.get(formEditing.toString()).name.isValid = true;
+        newEducation.get(formEditing).name.isValid = true;
         setEducation(newEducation);
     }
   }
@@ -434,7 +454,7 @@ function App() {
   const handleDegreeSelectChange = (e) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
-        newEducation.get(formEditing.toString()).degree.isValid = true;
+        newEducation.get(formEditing).degree.isValid = true;
         setEducation(newEducation);
     }
   }
@@ -442,7 +462,7 @@ function App() {
   const handleTitleStudyChange = (e) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
-        newEducation.get(formEditing.toString()).title.isValid = true;
+        newEducation.get(formEditing).title.isValid = true;
         setEducation(newEducation);
     }
   }
@@ -450,7 +470,7 @@ function App() {
   const handleStudyStartChange = (e) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
-        newEducation.get(formEditing.toString()).start.isValid = true;
+        newEducation.get(formEditing).start.isValid = true;
         setEducation(newEducation);
     }
   }
@@ -458,46 +478,50 @@ function App() {
   const handleStudyEndChange = (e) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
-        newEducation.get(formEditing.toString()).end.isValid = true;
+        newEducation.get(formEditing).end.isValid = true;
         setEducation(newEducation);
     }
   }
 
   const handleFirstNameChange = (e) => {
     if (e.target.checkValidity()) {
-        const newName = {...firstName, isValid: true}
-        setFirstName(newName);
+        const newGenInfo = {...generalInfo}
+        newGenInfo.firstName.isValid = true;
+        setGeneralInfo(newGenInfo);
     }
   }
 
   const handleLastNameChange = (e) => {
     if (e.target.checkValidity()) {
-        const newName = {...lastName, isValid: true}
-        setLastName(newName);
+        const newGenInfo = {...generalInfo}
+        newGenInfo.lastName.isValid = true;
+        setGeneralInfo(newGenInfo);
     }
   }
 
   const handleEmailChange = (e) => {
     if (e.target.checkValidity()) {
-        const newEmail = {...email, isValid: true}
-        setEmail(newEmail);
+        const newGenInfo = {...generalInfo}
+        newGenInfo.email.isValid = true;
+        setGeneralInfo(newGenInfo);
     }
   }
 
   const handlePhoneChange = (e) => {
     if (e.target.checkValidity()) {
-        const newPhone = {...phone, isValid: true}
-        setPhone(newPhone);
+        const newGenInfo = {...generalInfo}
+        newGenInfo.phone.isValid = true;
+        setGeneralInfo(newGenInfo);
     }
   }
 
   const handleRightArrowClick = () => {
-    setHasChanged(false);
+    setUnsavedChange(false);
     setStatus(status + 1);
   }
 
   const handleLeftArrowClick = () => {
-    setHasChanged(false);
+    setUnsavedChange(false);
     setStatus(status - 1);
   }
 
@@ -506,19 +530,16 @@ function App() {
     return (
         <>
             <Welcome />
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </>
     )
   }
   else if (status === GENERAL_INFO) {
     return (
         <>
-            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={hasChanged} />
+            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
-            <GeneralInfo  firstName={firstName}
-                          lastName={lastName}
-                          email={email}
-                          phone={phone}
+            <GeneralInfo  generalInfo={generalInfo}
                           handleFirstNameChange={handleFirstNameChange}
                           handleLastNameChange={handleLastNameChange}
                           handleEmailChange={handleEmailChange}
@@ -526,17 +547,16 @@ function App() {
                           handleSubmit={handleGeneralSubmit}
                           handleFormChange={handleFormChange} />
 
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </>
     )
   }
   else if (status === EDUCATION) {
     return (
         <>
-        <LeftArrow handleClick={handleLeftArrowClick} hasChanged={hasChanged} />
+        <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
         <Education education={education}
-                   eduCount={eduCount}
                    handleSchoolNameChange={handleSchoolNameChange}
                    handleDegreeSelectChange={handleDegreeSelectChange}
                    handleTitleStudyChange={handleTitleStudyChange}
@@ -548,17 +568,16 @@ function App() {
                    handleClose={handleEduClose}
                    handleFormChange={handleFormChange} />
 
-        <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
+        <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
     </>
     )
   }
   else if (status === WORK) {
     return(
         <>
-            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={hasChanged} />
+            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
             <Work work={work}
-                  workCount={workCount}
                   handleWorkTitleChange={handleWorkTitleChange}
                   handleCompanyNameChange={handleCompanyNameChange}
                   handleCompanyLocationChange={handleCompanyLocationChange}
@@ -571,9 +590,64 @@ function App() {
                   handleClose={handleWorkClose} 
                   handleFormChange={handleFormChange} />
 
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={hasChanged} />
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </>
     )}
+    else if (status === REVIEW) {
+        let educationIsValid = true;
+        for(const [id, edu] of education.entries()) {
+            if (!edu.isValid){
+                educationIsValid = false;
+                break;
+            }
+        }
+
+        // let workIsValid = true;
+        // for(const [id, work] of work.entries()) {
+        //     console.log(id);
+        //     if (!work.isValid) {
+        //         workIsValid = false;
+        //         break;
+        //     }
+        // }
+
+        const validForms = (generalInfo.isValid && educationIsValid);
+        return (
+            <>
+                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <div className='review-section'>
+                <h1>Review Information</h1>
+
+                {generalInfo.isValid ?
+                                <GeneralInfo  generalInfo={generalInfo}
+                                handleFirstNameChange={handleFirstNameChange}
+                                handleLastNameChange={handleLastNameChange}
+                                handleEmailChange={handleEmailChange}
+                                handlePhoneChange={handlePhoneChange} 
+                                handleSubmit={handleGeneralSubmit}
+                                handleFormChange={handleFormChange}
+                                handleGeneralEdit={handleGeneralEdit}
+                                review={true} /> 
+                
+                    : <p>General Info has invalid information</p>  
+                }
+                {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
+
+                </div>
+
+
+            </>
+        )}
+        else if (status === SUBMITTED) {
+            return (
+                <>
+                    <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
+                    <h2>Application Submitted</h2>
+                    <p>Thank you for submitting your application.</p>
+                    <p>We will review your application and notify you if you are selected to move forward.</p>
+                </>
+            )
+        }
 }
 
 export default App;

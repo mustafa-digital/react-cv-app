@@ -2,7 +2,6 @@ import { AddSection } from "./AddSection";
 import { ErrorMessage } from "./ErrorMessage";
 
 export function Work({ work,
-                       workCount,
                        handleWorkTitleChange,
                        handleCompanyNameChange,
                        handleCompanyLocationChange,
@@ -15,14 +14,13 @@ export function Work({ work,
                        handleClose,
                        handleFormChange }) {
 
-    // Creates WorkForm components based on workCount number, and pushes them unto workForms array
+    // Creates WorkForm components based on work number, and pushes them unto workForms array
     function getWorkForms() {
         let workForms = [];
 
-        for (let i = 0; i < workCount; i++) {
-            workForms.push( <WorkForm index={i.toString()}
+        for (let i = 0; i < work.size; i++) {
+            workForms.push( <WorkForm index={i}
                                       work={work}
-                                      workCount={workCount}
                                       handleWorkTitleChange={handleWorkTitleChange}
                                       handleCompanyNameChange={handleCompanyNameChange}
                                       handleCompanyLocationChange={handleCompanyLocationChange}
@@ -68,7 +66,6 @@ function WorkForm({    index,
                        handleClose,
                        handleFormChange
                   }) {
-    index = index.toString();
     const w = work.get(index);
     const jobTitle = w.title;
     const compName = w.company;
@@ -150,7 +147,7 @@ function WorkForm({    index,
                                     placeholder=''
                                     defaultValue={jobEnd.value}
                                     onChange={handleWorkEndChange}
-                                    className='empty-date' />
+                                    className={jobEnd.value ? '' : 'empty-date'} />
                     </div>
                 </div>
                 <button type='submit' className='save-button'>Save</button>   

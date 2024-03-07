@@ -145,8 +145,10 @@ input {
     color: var(--general-font-color);
 }
 
-.save-button {
-    width: 50px;
+.save-button,
+.edit-button {
+    width: 60px;
+    padding: 5px;
     justify-self: end;
 }
 
@@ -198,5 +200,19 @@ input:focus {
     height: 100px;
 }
 
+.review-section {
+    padding: 10px;
+    display: grid;
+    border: none;
 
+}
 
+.review-section > h1 {
+    font-size: 2.25rem;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+.check-mark-icon {
+    height: 100px;
+}
