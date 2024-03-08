@@ -32,6 +32,8 @@ function App() {
   const [work, setWork] = useState(new Map());
   const [unsavedChange, setUnsavedChange] = useState(false);
 
+  console.log(Array.from(work.values()));
+
   const handlePageChange = (page) => {
     setStatus(page);
   }
@@ -547,6 +549,21 @@ function App() {
     setStatus(status - 1);
   }
 
+  const workProps = {
+    work: work,
+    handleWorkTitleChange: handleWorkTitleChange,
+    handleCompanyNameChange: handleCompanyNameChange,
+    handleCompanyLocationChange: handleCompanyLocationChange,
+    handleWorkDescriptionChange: handleWorkDescriptionChange,
+    handleWorkStartChange: handleWorkStartChange,
+    handleWorkEndChange: handleWorkEndChange,
+    handleSubmit: handleWorkSubmit,
+    handleAddWorkClick: handleAddWorkClick,
+    formEditingHandler: formEditingHandler,
+    handleClose: handleWorkClose,
+    handleFormChange: handleFormChange,
+    handlePageChange: handlePageChange
+  }
 
   if (status === WELCOME_PAGE) {
     return (
@@ -599,23 +616,16 @@ function App() {
         <>
             <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
-            <Work work={work}
-                  handleWorkTitleChange={handleWorkTitleChange}
-                  handleCompanyNameChange={handleCompanyNameChange}
-                  handleCompanyLocationChange={handleCompanyLocationChange}
-                  handleWorkDescriptionChange={handleWorkDescriptionChange}
-                  handleWorkStartChange={handleWorkStartChange}
-                  handleWorkEndChange={handleWorkEndChange}
-                  handleSubmit={handleWorkSubmit}
-                  handleAddWorkClick={handleAddWorkClick} 
-                  formEditingHandler={formEditingHandler}
-                  handleClose={handleWorkClose} 
-                  handleFormChange={handleFormChange} />
+            <Work {...workProps} />
 
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </>
     )}
     else if (status === REVIEW) {
+
+        // check if the forms are valid or not to determine what to render on this page
+
+        // check all education entries 
         let educationIsValid = true;
         for (const [id, edu] of education.entries()) {
             if (!edu.isValid){
@@ -624,6 +634,7 @@ function App() {
             }
         }
 
+        // check all work entries
         let workIsValid = true;
         for(const [id, wrk] of work.entries()) {
             console.log(wrk);
@@ -632,38 +643,42 @@ function App() {
                 break;
             }
         }
-        console.log({workIsValid});
-        const validForms = (generalInfo.isValid && educationIsValid && workIsValid);
-        console.log({validForms});
+
+        const validForms = (generalInfo.isValid && educationIsValid && workIsValid); // all three are valid
         return (
             <>
                 <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
                 <div className='review-section'>
                 <h1>Review Information</h1>
 
-                {(!validForms) &&
+                {/* if the forms are not valid, render invalidForms */}
+                {!validForms &&
                     <InvalidForms generalIsValid={generalInfo.isValid} 
                                   educationIsValid={educationIsValid} 
                                   workIsValid={workIsValid} 
                                   handlePageChange={handlePageChange}/> 
                 }
                 
-                {/* {validForms && 
+                {validForms && 
                 
-                    generalInfo.isValid ?
-                                    <GeneralInfo  generalInfo={generalInfo}
-                                    handleFirstNameChange={handleFirstNameChange}
-                                    handleLastNameChange={handleLastNameChange}
-                                    handleEmailChange={handleEmailChange}
-                                    handlePhoneChange={handlePhoneChange} 
-                                    handleSubmit={handleGeneralSubmit}
-                                    handleFormChange={handleFormChange}
-                                    handleGeneralEdit={handleGeneralEdit}
-                                    review={true} /> 
+                    <GeneralInfo  generalInfo={generalInfo}
+                                  handleFirstNameChange={handleFirstNameChange}
+                                  handleLastNameChange={handleLastNameChange}
+                                  handleEmailChange={handleEmailChange}
+                                  handlePhoneChange={handlePhoneChange} 
+                                  handleSubmit={handleGeneralSubmit}
+                                  handleFormChange={handleFormChange}
+                                  handlePageChange={handlePageChange}
+                                  review={true} />
+                                  
+                    // && 
+
+                    // Array.from(work.values())
                     
-                        : <p>General Info has invalid information</p>  
+
                 }
-                {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>} */}
+                
+                {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
 
                 </div>
 

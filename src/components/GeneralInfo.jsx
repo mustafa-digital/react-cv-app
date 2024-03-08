@@ -8,8 +8,10 @@ export function GeneralInfo({ generalInfo,
                               handleSubmit,
                               handleFormChange,
                               review = false,
-                              handleGeneralEdit
+                              handlePageChange
                             }) {
+
+    const GENERAL_INFO = 1;
 
     return (
         <section>
@@ -72,7 +74,7 @@ export function GeneralInfo({ generalInfo,
                            disabled={review}  
                            required />
                 </label>
-                {review ? <button type='button' onClick={handleGeneralEdit} className='edit-button'>Change</button> : 
+                {review ? <button type='button' onClick={() => handlePageChange(GENERAL_INFO)} className='edit-button'>Change</button> : 
                     <button type='submit' className='save-button'>Save</button>}
             </form>
         </section>
