@@ -6,6 +6,7 @@ import { RightArrow } from './components/RightArrow';
 import { Education } from './components/Education';
 import { Work } from './components/Work';
 import { InvalidForms } from './components/InvalidForms';
+import { checkIsValid } from './utils/checkIsValid';
 
 const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
@@ -31,10 +32,6 @@ function App() {
   const [formEditing, setFormEditing] = useState(0);
   const [work, setWork] = useState(new Map());
   const [unsavedChange, setUnsavedChange] = useState(false);
-
-  console.log(Array.from(work.values()));
-  const el = document.querySelector('#work-form:first-child');
-  console.log({el});
 
   const handlePageChange = (page) => {
     setStatus(page);
@@ -605,9 +602,7 @@ function App() {
     return (
         <section className='main'>
             <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-
             <GeneralInfo  {...generalInfoProps} />
-
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </section>
     )
@@ -616,9 +611,7 @@ function App() {
     return (
         <section className='main'>
             <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-
             <Education {...educationProps} />
-
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </section>
     )
@@ -627,71 +620,43 @@ function App() {
     return(
         <section className='main'>
             <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-
             <Work {...workProps} />
-
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
         </section>
     )}
     else if (status === REVIEW) {
-
         // check if the forms are valid or not to determine what to render on this page
+        let educationIsValid = checkIsValid(education);
+        let workIsValid = checkIsValid(work);
 
-        // check all education entries 
-        let educationIsValid = true;
-        for (const [id, edu] of education.entries()) {
-            if (!edu.isValid){
-                educationIsValid = false;
-                break;
-            }
-        }
-
-        // check all work entries
-        let workIsValid = true;
-        for(const [id, wrk] of work.entries()) {
-            console.log(wrk);
-            if (!wrk.isValid) {
-                workIsValid = false;
-                break;
-            }
-        }
-
-        const validForms = (generalInfo.isValid && educationIsValid && workIsValid); // all three are valid
+        // check all three are valid
+        const validForms = (generalInfo.isValid && educationIsValid && workIsValid); 
         return (
             <section className='main'>
                 <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
                 <section className='content'>
-                <h1>Review Information</h1>
-
-                {/* if the forms are not valid, render invalidForms */}
-                {!validForms &&
-                    <InvalidForms generalIsValid={generalInfo.isValid} 
-                                  educationIsValid={educationIsValid} 
-                                  workIsValid={workIsValid} 
-                                  handlePageChange={handlePageChange} /> 
-                }
-                
-                {validForms && 
-                
-                    <GeneralInfo  {...generalInfoProps} review={true} />
-                                  
-                    // && 
-
-                    // Array.from(work.values())
-                    
-
-                }
-                
-                {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
-
+                    <h1>Review Information</h1>
+                    {/* if the forms are not valid, render invalidForms */}
+                    {!validForms &&
+                        <InvalidForms generalIsValid={generalInfo.isValid} 
+                                    educationIsValid={educationIsValid} 
+                                    workIsValid={workIsValid} 
+                                    handlePageChange={handlePageChange} /> 
+                    }
+                    {validForms &&
+                        <> 
+                            <GeneralInfo  {...generalInfoProps} review={true} /> 
+                            <Education {...Object.assign(educationProps, {review:true})} />
+                            <Work {...Object.assign(workProps, {review:true})} />
+                        </>
+                    }
+                    {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
                 </section>
-
-
             </section>
         )}
         else if (status === SUBMITTED) {
             return (
-                <section className='main'>
+                <section>
                     <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
                     <h2>Application Submitted</h2>
                     <p>Thank you for submitting your application.</p>
@@ -700,5 +665,4 @@ function App() {
             )
         }
 }
-
 export default App;

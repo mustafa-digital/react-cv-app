@@ -26,7 +26,7 @@ export function EducationForm({
 
     return (
         <>
-            <button className='close-button' type='button' onClick={handleClose}>&times;</button>
+            {!review && <button className='close-button' type='button' onClick={handleClose}>&times;</button>}
             <form id='education-form'
                 className="section-border" 
                 onSubmit={handleSubmit} 

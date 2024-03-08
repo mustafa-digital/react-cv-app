@@ -14,7 +14,7 @@ export function GeneralInfo({ generalInfo,
     const GENERAL_INFO = 1;
 
     return (
-        <section className="content">
+        <section className={!review ? 'content' : ''}>
             {!review && <h1>General Information</h1>}
             <form id='general-form'
                   className="section-border" 

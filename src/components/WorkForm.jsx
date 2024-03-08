@@ -28,11 +28,11 @@ export function WorkForm({ index,
 
     return (
         <>
-            <button className='close-button' 
+            {!review && <button className='close-button' 
                     type='button' 
                     onClick={handleClose}>
                     &times;
-            </button>
+            </button>}
 
             <form id='work-form'
                   className="section-border"  

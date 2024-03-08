@@ -13,7 +13,7 @@
 #root {
     /* margin: 0 auto; */
     padding: 2rem;
-    /* text-align: center; */
+    text-align: center;
     position: relative;
     width: 100%;
 }
@@ -90,12 +90,12 @@ input {
 }
 
 .right {
-    /* right: -50px; */
+    right: -30px;
     grid-area: 1 / 3 / 2 / 4;
 }
 
 .left {
-    /* left: -50px; */
+    left: -30px;
     grid-area: 1 / 1 / 2 / 2;
 }
 
@@ -108,6 +108,11 @@ input {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+input[type=date]:disabled {
+    background-color: rgba(239, 239, 239, 0.3);
+    border: 2px solid rgba(118, 118, 118, 0.3);
 }
 
 #degree-select {
@@ -162,10 +167,6 @@ form > label:first-child p.error-message {
     right: 25px;
 }
 
-/* p.error-message:has( + input[name='school-name']) {
-    right: 25px;
-} */
-
 .empty-date {
     background: transparent;
     border: 1px solid rgb(118, 118, 118);
@@ -177,7 +178,7 @@ form > label:first-child p.error-message {
 }
 
 input:valid:not(.empty-date),
-.valid {
+.valid:not(:disabled) {
     border: 1px solid #8BC34A;
     background-color: rgba(139, 195, 74, 0.25);
 }
@@ -244,6 +245,7 @@ input:focus {
 .form-invalid-span {
     color:#386bff;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .review-button-invalid {
@@ -261,4 +263,6 @@ input:focus {
 
 .content {
     grid-area: 1 / 2 / 2 / 3;
+    text-align: start;
 }
+
