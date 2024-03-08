@@ -4,11 +4,10 @@ import { WorkForm } from "../components/WorkForm";
 export function getWorkForms(props) {
 
     let workForms = [];
-
     for (let i = 0; i < props.work.size; i++) {
         workForms.push( <WorkForm index={i}
                                   {...props} /> 
-                    );}
-
+                    );
+    }
     return workForms;
 }

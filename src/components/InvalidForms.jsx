@@ -24,7 +24,7 @@ export function InvalidForms({ generalIsValid, educationIsValid, workIsValid, ha
     const WORK = 3; 
 
     return (
-        <section className="section-border warning-section">
+        <div className="section-border">
             <h3>Some of the information is incomplete. Please re-check the forms by clicking the links.</h3>
             {!generalIsValid && 
                 <Warning formName={'General Info'} page={GENERAL_INFO} />
@@ -37,7 +37,7 @@ export function InvalidForms({ generalIsValid, educationIsValid, workIsValid, ha
             {!workIsValid && 
                 <Warning formName={'Work'} page={WORK} />
             }
-        </section>
+        </div>
     )
 }
 

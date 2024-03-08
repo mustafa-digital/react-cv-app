@@ -1,7 +1,7 @@
 export function Welcome() {
 
     return (
-        <section>
+        <section className="content">
             <h1>Welcome</h1>
             <div className='section-border'>
                 <p>Thank you for your interest in applying for this position.</p>

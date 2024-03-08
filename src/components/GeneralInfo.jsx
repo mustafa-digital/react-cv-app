@@ -14,9 +14,10 @@ export function GeneralInfo({ generalInfo,
     const GENERAL_INFO = 1;
 
     return (
-        <section>
+        <section className="content">
             {!review && <h1>General Information</h1>}
-            <form id='general-form' 
+            <form id='general-form'
+                  className="section-border" 
                   onSubmit={handleSubmit}
                   onInput={handleFormChange}
                   noValidate >

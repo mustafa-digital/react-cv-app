@@ -1,19 +1,19 @@
 import { ErrorMessage } from "./ErrorMessage";
 
 export function WorkForm({ index,
-                    work,
-                    handleWorkTitleChange,
-                    handleCompanyNameChange,
-                    handleCompanyLocationChange,
-                    handleWorkDescriptionChange,
-                    handleWorkStartChange,
-                    handleWorkEndChange,
-                    formEditingHandler,
-                    handleSubmit,
-                    handleClose,
-                    handleFormChange,
-                    handlePageChange,
-                    review=false
+                           work,
+                           handleWorkTitleChange,
+                           handleCompanyNameChange,
+                           handleCompanyLocationChange,
+                           handleWorkDescriptionChange,
+                           handleWorkStartChange,
+                           handleWorkEndChange,
+                           formEditingHandler,
+                           handleSubmit,
+                           handleClose,
+                           handleFormChange,
+                           handlePageChange,
+                           review=false
 }) {
 
     const w = work.get(index);
@@ -34,7 +34,8 @@ export function WorkForm({ index,
                     &times;
             </button>
 
-            <form id='work-form' 
+            <form id='work-form'
+                  className="section-border"  
                   onSubmit={handleSubmit} 
                   onClick={formEditingHandler}
                   onInput={handleFormChange} 

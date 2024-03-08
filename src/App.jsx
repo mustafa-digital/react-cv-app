@@ -33,6 +33,8 @@ function App() {
   const [unsavedChange, setUnsavedChange] = useState(false);
 
   console.log(Array.from(work.values()));
+  const el = document.querySelector('#work-form:first-child');
+  console.log({el});
 
   const handlePageChange = (page) => {
     setStatus(page);
@@ -549,6 +551,32 @@ function App() {
     setStatus(status - 1);
   }
 
+  const generalInfoProps = {
+    generalInfo: generalInfo,
+    handleFirstNameChange: handleFirstNameChange,
+    handleLastNameChange: handleLastNameChange,
+    handleEmailChange: handleEmailChange,
+    handlePhoneChange: handlePhoneChange,
+    handleSubmit: handleGeneralSubmit,
+    handleFormChange: handleFormChange,
+    handlePageChange: handlePageChange
+  }
+
+  const educationProps = {
+    education: education,
+    handleSchoolNameChange: handleSchoolNameChange,
+    handleDegreeSelectChange: handleDegreeSelectChange,
+    handleTitleStudyChange: handleTitleStudyChange,
+    handleStudyStartChange: handleStudyStartChange,
+    handleStudyEndChange: handleStudyEndChange,
+    handleSubmit: handleEducationSubmit,
+    handleAddEducationClick: handleAddEducationClick,
+    formEditingHandler: formEditingHandler,
+    handleClose: handleEduClose,
+    handleFormChange: handleFormChange,
+    handlePageChange: handlePageChange
+  }
+
   const workProps = {
     work: work,
     handleWorkTitleChange: handleWorkTitleChange,
@@ -567,59 +595,43 @@ function App() {
 
   if (status === WELCOME_PAGE) {
     return (
-        <>
+        <section className='main'>
             <Welcome />
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </>
+        </section>
     )
   }
   else if (status === GENERAL_INFO) {
     return (
-        <>
+        <section className='main'>
             <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
-            <GeneralInfo  generalInfo={generalInfo}
-                          handleFirstNameChange={handleFirstNameChange}
-                          handleLastNameChange={handleLastNameChange}
-                          handleEmailChange={handleEmailChange}
-                          handlePhoneChange={handlePhoneChange} 
-                          handleSubmit={handleGeneralSubmit}
-                          handleFormChange={handleFormChange} />
+            <GeneralInfo  {...generalInfoProps} />
 
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </>
+        </section>
     )
   }
   else if (status === EDUCATION) {
     return (
-        <>
-        <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+        <section className='main'>
+            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
-        <Education education={education}
-                   handleSchoolNameChange={handleSchoolNameChange}
-                   handleDegreeSelectChange={handleDegreeSelectChange}
-                   handleTitleStudyChange={handleTitleStudyChange}
-                   handleStudyStartChange={handleStudyStartChange}
-                   handleStudyEndChange={handleStudyEndChange} 
-                   handleSubmit={handleEducationSubmit}
-                   handleAddEducationClick={handleAddEducationClick}
-                   formEditingHandler={formEditingHandler} 
-                   handleClose={handleEduClose}
-                   handleFormChange={handleFormChange} />
+            <Education {...educationProps} />
 
-        <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-    </>
+            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+        </section>
     )
   }
   else if (status === WORK) {
     return(
-        <>
+        <section className='main'>
             <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
 
             <Work {...workProps} />
 
             <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </>
+        </section>
     )}
     else if (status === REVIEW) {
 
@@ -646,9 +658,9 @@ function App() {
 
         const validForms = (generalInfo.isValid && educationIsValid && workIsValid); // all three are valid
         return (
-            <>
+            <section className='main'>
                 <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-                <div className='review-section'>
+                <section className='content'>
                 <h1>Review Information</h1>
 
                 {/* if the forms are not valid, render invalidForms */}
@@ -656,20 +668,12 @@ function App() {
                     <InvalidForms generalIsValid={generalInfo.isValid} 
                                   educationIsValid={educationIsValid} 
                                   workIsValid={workIsValid} 
-                                  handlePageChange={handlePageChange}/> 
+                                  handlePageChange={handlePageChange} /> 
                 }
                 
                 {validForms && 
                 
-                    <GeneralInfo  generalInfo={generalInfo}
-                                  handleFirstNameChange={handleFirstNameChange}
-                                  handleLastNameChange={handleLastNameChange}
-                                  handleEmailChange={handleEmailChange}
-                                  handlePhoneChange={handlePhoneChange} 
-                                  handleSubmit={handleGeneralSubmit}
-                                  handleFormChange={handleFormChange}
-                                  handlePageChange={handlePageChange}
-                                  review={true} />
+                    <GeneralInfo  {...generalInfoProps} review={true} />
                                   
                     // && 
 
@@ -680,19 +684,19 @@ function App() {
                 
                 {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
 
-                </div>
+                </section>
 
 
-            </>
+            </section>
         )}
         else if (status === SUBMITTED) {
             return (
-                <>
+                <section className='main'>
                     <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
                     <h2>Application Submitted</h2>
                     <p>Thank you for submitting your application.</p>
                     <p>We will review your application and notify you if you are selected to move forward.</p>
-                </>
+                </section>
             )
         }
 }
