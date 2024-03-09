@@ -15,7 +15,6 @@ export function EducationForm({
                             handlePageChange,
                             review=false
     }) {
-
     const edu = education.get(index);
     const schoolName = edu.name;
     const degree = edu.degree;
@@ -23,7 +22,6 @@ export function EducationForm({
     const studyStart = edu.start;
     const studyEnd = edu.end;
     const EDU_PAGE = 2;
-
     return (
         <>
             {!review && <button className='close-button' type='button' onClick={handleClose}>&times;</button>}

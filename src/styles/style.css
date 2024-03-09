@@ -50,11 +50,9 @@ form {
     min-height: 200px;
     min-width: 300px;
     text-align: center;
-}
-
-.add-section {
-    position: relative;
-    top: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 label {
