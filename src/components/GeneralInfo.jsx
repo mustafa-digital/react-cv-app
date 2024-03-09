@@ -10,9 +10,7 @@ export function GeneralInfo({ generalInfo,
                               review = false,
                               handlePageChange
                             }) {
-
     const GENERAL_INFO = 1;
-
     return (
         <section className={!review ? 'content' : ''}>
             {!review && <h1>General Information</h1>}
