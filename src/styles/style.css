@@ -151,7 +151,7 @@ input[type=date]:disabled {
 .edit-button {
     width: 60px;
     padding: 5px;
-    justify-self: end;
+    align-self: end;
 }
 
 .error-message {

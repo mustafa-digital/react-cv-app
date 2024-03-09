@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { GeneralInfo } from './components/GeneralInfo';
-import { Welcome } from './components/Welcome';
-import { LeftArrow } from './components/LeftArrow';
-import { RightArrow } from './components/RightArrow';
-import { Education } from './components/Education';
-import { Work } from './components/Work';
-import { InvalidForms } from './components/InvalidForms';
-import { checkIsValid } from './utils/checkIsValid';
+import { GeneralInfo } from './components';
+import { Welcome } from './components';
+import { LeftArrow } from './components';
+import { RightArrow } from './components';
+import { Education } from './components';
+import { Work } from './components';
+import { InvalidForms } from './components';
+import { checkIsValid } from './utils';
 
 const WELCOME_PAGE = 0;
 const GENERAL_INFO = 1;
