@@ -1,10 +1,7 @@
 import { ErrorMessage } from "./ErrorMessage";
 
 export function GeneralInfo({ generalInfo,
-                              handleFirstNameChange, 
-                              handleLastNameChange, 
-                              handleEmailChange, 
-                              handlePhoneChange, 
+                              handleGeneralInput, 
                               handleSubmit,
                               handleFormChange,
                               review = false,
@@ -28,7 +25,7 @@ export function GeneralInfo({ generalInfo,
                                 name='first-name'
                                 placeholder='First Name' 
                                 defaultValue={generalInfo.firstName.value}
-                                onChange={handleFirstNameChange}
+                                onChange={(e) => handleGeneralInput(e, 'firstName')}
                                 disabled={review}  
                                 required />
 
@@ -41,7 +38,7 @@ export function GeneralInfo({ generalInfo,
                                name='last-name' 
                                placeholder='Last Name' 
                                defaultValue={generalInfo.lastName.value}
-                               onChange={handleLastNameChange}
+                               onChange={(e) => handleGeneralInput(e, 'lastName')}
                                disabled={review} 
                                required />
                     </label>
@@ -55,7 +52,7 @@ export function GeneralInfo({ generalInfo,
                            name='email'
                            placeholder='example@email.com' 
                            defaultValue={generalInfo.email.value}
-                           onChange={handleEmailChange} 
+                           onChange={(e) => handleGeneralInput(e, 'email')} 
                            disabled={review} 
                            required />
                 </label>
@@ -68,7 +65,7 @@ export function GeneralInfo({ generalInfo,
                            name='phone'
                            placeholder='555-555-5555'
                            defaultValue={generalInfo.phone.value}
-                           onChange={handlePhoneChange}
+                           onChange={(e) => handleGeneralInput(e, 'phone')}
                            pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}'
                            disabled={review}  
                            required />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
 import { GeneralInfo } from './components';
 import { Welcome } from './components';
 import { LeftArrow } from './components';
@@ -15,13 +15,31 @@ const WORK = 3;
 const REVIEW = 4;
 const SUBMITTED = 5;
 
+// template object for form input variables
 const inputTemplateObj = {  value: '',
                             isValid: true,
                             message: '' 
                          }
 
-function App() {
-  const [status, setStatus] = useState(WELCOME_PAGE);
+const statusReducer = (status, action) => {
+    switch(action.type) {
+        case 'clicked_right': {
+            return status + 1;
+        }
+        case 'clicked_left': {
+            return status - 1;
+        }
+        case 'clicked_edit': {
+            return action.page;
+        }
+        default: {
+            throw Error('Error! Unknown action in status reducer: ' + action.type);
+        }
+    }
+}
+
+export function App() {
+  const [status, statusDispatch] = useReducer(statusReducer, WELCOME_PAGE);
   const [generalInfo, setGeneralInfo] = useState({  firstName: {...inputTemplateObj},
                                                     lastName: {...inputTemplateObj},
                                                     email: {...inputTemplateObj},
@@ -34,7 +52,10 @@ function App() {
   const [unsavedChange, setUnsavedChange] = useState(false);
 
   const handlePageChange = (page) => {
-    setStatus(page);
+    statusDispatch({
+        type: 'clicked_edit',
+        page: page
+    })
   }
 
   const handleFormChange = () => {
@@ -506,54 +527,55 @@ function App() {
     }
   }
 
-  const handleFirstNameChange = (e) => {
+  const handleGeneralInput = (e, name) => {
     if (e.target.checkValidity()) {
         const newGenInfo = {...generalInfo}
-        newGenInfo.firstName.isValid = true;
+        newGenInfo[name].isValid = true;
         setGeneralInfo(newGenInfo);
     }
   }
 
-  const handleLastNameChange = (e) => {
-    if (e.target.checkValidity()) {
-        const newGenInfo = {...generalInfo}
-        newGenInfo.lastName.isValid = true;
-        setGeneralInfo(newGenInfo);
-    }
-  }
+//   const handleLastNameChange = (e) => {
+//     if (e.target.checkValidity()) {
+//         const newGenInfo = {...generalInfo}
+//         newGenInfo.lastName.isValid = true;
+//         setGeneralInfo(newGenInfo);
+//     }
+//   }
 
-  const handleEmailChange = (e) => {
-    if (e.target.checkValidity()) {
-        const newGenInfo = {...generalInfo}
-        newGenInfo.email.isValid = true;
-        setGeneralInfo(newGenInfo);
-    }
-  }
+//   const handleEmailChange = (e) => {
+//     if (e.target.checkValidity()) {
+//         const newGenInfo = {...generalInfo}
+//         newGenInfo.email.isValid = true;
+//         setGeneralInfo(newGenInfo);
+//     }
+//   }
 
-  const handlePhoneChange = (e) => {
-    if (e.target.checkValidity()) {
-        const newGenInfo = {...generalInfo}
-        newGenInfo.phone.isValid = true;
-        setGeneralInfo(newGenInfo);
-    }
-  }
+//   const handlePhoneChange = (e) => {
+//     if (e.target.checkValidity()) {
+//         const newGenInfo = {...generalInfo}
+//         newGenInfo.phone.isValid = true;
+//         setGeneralInfo(newGenInfo);
+//     }
+//   }
 
   const handleRightArrowClick = () => {
     setUnsavedChange(false);
-    setStatus(status + 1);
+    statusDispatch({
+        type: 'clicked_right'
+    })
   }
 
   const handleLeftArrowClick = () => {
     setUnsavedChange(false);
-    setStatus(status - 1);
+    statusDispatch({
+        type: 'clicked_left'
+    })
   }
 
   const generalInfoProps = {
     generalInfo: generalInfo,
-    handleFirstNameChange: handleFirstNameChange,
-    handleLastNameChange: handleLastNameChange,
-    handleEmailChange: handleEmailChange,
-    handlePhoneChange: handlePhoneChange,
+    handleGeneralInput: handleGeneralInput,
     handleSubmit: handleGeneralSubmit,
     handleFormChange: handleFormChange,
     handlePageChange: handlePageChange
@@ -650,7 +672,7 @@ function App() {
                             <Work {...Object.assign(workProps, {review:true})} />
                         </>
                     }
-                    {validForms && <button onClick={() => setStatus(SUBMITTED)} className='submit-button'>Submit Application</button>}
+                    {validForms && <button onClick={() => statusDispatch({type: 'clicked_edit', page:SUBMITTED})} className='submit-button'>Submit Application</button>}
                 </section>
             </section>
         )}
@@ -665,4 +687,3 @@ function App() {
             )
         }
 }
-export default App;
