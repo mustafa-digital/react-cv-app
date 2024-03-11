@@ -3,11 +3,7 @@ import { ErrorMessage } from "./ErrorMessage";
 export function EducationForm({
                             index,
                             education,
-                            handleSchoolNameChange,
-                            handleDegreeSelectChange,
-                            handleTitleStudyChange,
-                            handleStudyStartChange,
-                            handleStudyEndChange,
+                            handleEducationInput,
                             handleSubmit,
                             formEditingHandler,
                             handleClose,
@@ -39,7 +35,7 @@ export function EducationForm({
                             name='school-name'
                             placeholder=''
                             defaultValue={schoolName.value}
-                            onChange={handleSchoolNameChange}
+                            onChange={(e) => handleEducationInput(e, 'name')}
                             disabled={review} 
                             required />
                 </label>
@@ -51,7 +47,7 @@ export function EducationForm({
                         <select name='degree'
                                 id='degree-select'
                                 defaultValue={degree.value} 
-                                onChange={handleDegreeSelectChange}
+                                onChange={(e) => handleEducationInput(e, 'degree')}
                                 className={degree.value ? 'valid' : ''}
                                 disabled={review}  
                                 required >
@@ -81,7 +77,7 @@ export function EducationForm({
                                     name='title-study'
                                     placeholder=''
                                     defaultValue={titleStudy.value}
-                                    onChange={handleTitleStudyChange}
+                                    onChange={(e) => handleEducationInput(e, 'title')}
                                     disabled={review}  
                                     required />
                     </label>
@@ -100,7 +96,7 @@ export function EducationForm({
                                     id='date-study-start'
                                     placeholder=''
                                     defaultValue={studyStart.value}
-                                    onChange={handleStudyStartChange}
+                                    onChange={(e) => handleEducationInput(e, 'start')}
                                     disabled={review}  
                                     required />
                         <span> to </span>
@@ -108,7 +104,7 @@ export function EducationForm({
                                     name='date-study-end'
                                     placeholder=''
                                     defaultValue={studyEnd.value}
-                                    onChange={handleStudyEndChange} 
+                                    onChange={(e) => handleEducationInput(e, 'end')} 
                                     className={studyEnd.value ? '' : 'empty-date'}
                                     disabled={review}  />
                     </div>

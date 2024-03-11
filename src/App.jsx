@@ -315,64 +315,6 @@ export function App() {
     setUnsavedChange(false);
   }
 
-  const handleGeneralSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-
-    const firstNameInput = document.querySelector('input[name="first-name"]');
-    const lastNameInput = document.querySelector('input[name="last-name"]');
-    const emailInput = document.querySelector('input[name="email"]');
-    const phoneInput = document.querySelector('input[name="phone"]');
-
-    const newInfo = {...generalInfo}
-    newInfo.isValid = true;
-
-    if (firstNameInput.validity.valid) {
-        newInfo.firstName = { ...generalInfo.firstName, value: formData.get('first-name'), isValid: true, message: '' }
-        firstNameInput.classList.remove('invalid');
-    } else {
-        newInfo.firstName = { ...generalInfo.firstName, value: '', isValid: false, message: 'required' }
-        firstNameInput.classList.add('invalid');
-        newInfo.isValid = false;
-    }
-
-    if (lastNameInput.validity.valid) {
-        newInfo.lastName = { ...generalInfo.lastName, value: formData.get('last-name'), isValid: true, message: '' }
-        lastNameInput.classList.remove('invalid');
-    } else {
-        newInfo.lastName = { ...generalInfo.lastName, value: '', isValid: false, message: 'required' }
-        lastNameInput.classList.add('invalid');
-        newInfo.isValid = false;
-    }
-
-    if (emailInput.validity.valid) {
-        newInfo.email = { ...generalInfo.email, value: formData.get('email'), isValid: true, message: '' }
-        emailInput.classList.remove('invalid');
-    } else {
-        newInfo.email = { ...generalInfo.email, value: '', isValid: false }
-        if (emailInput.validity.valueMissing) { newInfo.email.message = 'required'; } 
-        else if (emailInput.validity.typeMismatch) { newInfo.email.message = 'not a valid email' }
-
-        newInfo.isValid = false;
-        emailInput.classList.add('invalid');
-    }
-
-    if (phoneInput.validity.valid) {
-        newInfo.phone = { ...generalInfo.phone, value: formData.get('phone'), isValid: true, message: '' }
-        phoneInput.classList.remove('invalid');
-    } else {
-        newInfo.phone = { ...generalInfo.phone, value: '', isValid: false}
-        if (phoneInput.validity.valueMissing) { newInfo.phone.message = 'required'; } 
-        else if (phoneInput.validity.patternMismatch) { newInfo.phone.message = 'format: 555-555-5555' }
-
-        newInfo.isValid = false;
-        phoneInput.classList.add('invalid');
-    }
-
-    setGeneralInfo(newInfo);
-    setUnsavedChange(false);
-  }
-
   /* handler for close button on education forms
      removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
   */
@@ -487,77 +429,79 @@ export function App() {
     setEducation(newEducation);
   }
   
-  const handleSchoolNameChange = (e) => {
+  const handleEducationInput = (e, prop) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
-        newEducation.get(formEditing).name.isValid = true;
+        newEducation.get(formEditing)[prop].isValid = true;
         setEducation(newEducation);
     }
   }
 
-  const handleDegreeSelectChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newEducation = new Map(education);
-        newEducation.get(formEditing).degree.isValid = true;
-        setEducation(newEducation);
+  const handleGeneralSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const firstNameInput = document.querySelector('input[name="first-name"]');
+    const lastNameInput = document.querySelector('input[name="last-name"]');
+    const emailInput = document.querySelector('input[name="email"]');
+    const phoneInput = document.querySelector('input[name="phone"]');
+
+    const newInfo = {...generalInfo}
+    newInfo.isValid = true;
+
+    if (firstNameInput.validity.valid) {
+        newInfo.firstName = { ...generalInfo.firstName, value: formData.get('first-name'), isValid: true, message: '' }
+        firstNameInput.classList.remove('invalid');
+    } else {
+        newInfo.firstName = { ...generalInfo.firstName, value: '', isValid: false, message: 'required' }
+        firstNameInput.classList.add('invalid');
+        newInfo.isValid = false;
     }
+
+    if (lastNameInput.validity.valid) {
+        newInfo.lastName = { ...generalInfo.lastName, value: formData.get('last-name'), isValid: true, message: '' }
+        lastNameInput.classList.remove('invalid');
+    } else {
+        newInfo.lastName = { ...generalInfo.lastName, value: '', isValid: false, message: 'required' }
+        lastNameInput.classList.add('invalid');
+        newInfo.isValid = false;
+    }
+
+    if (emailInput.validity.valid) {
+        newInfo.email = { ...generalInfo.email, value: formData.get('email'), isValid: true, message: '' }
+        emailInput.classList.remove('invalid');
+    } else {
+        newInfo.email = { ...generalInfo.email, value: '', isValid: false }
+        if (emailInput.validity.valueMissing) { newInfo.email.message = 'required'; } 
+        else if (emailInput.validity.typeMismatch) { newInfo.email.message = 'not a valid email' }
+
+        newInfo.isValid = false;
+        emailInput.classList.add('invalid');
+    }
+
+    if (phoneInput.validity.valid) {
+        newInfo.phone = { ...generalInfo.phone, value: formData.get('phone'), isValid: true, message: '' }
+        phoneInput.classList.remove('invalid');
+    } else {
+        newInfo.phone = { ...generalInfo.phone, value: '', isValid: false}
+        if (phoneInput.validity.valueMissing) { newInfo.phone.message = 'required'; } 
+        else if (phoneInput.validity.patternMismatch) { newInfo.phone.message = 'format: 555-555-5555' }
+
+        newInfo.isValid = false;
+        phoneInput.classList.add('invalid');
+    }
+
+    setGeneralInfo(newInfo);
+    setUnsavedChange(false);
   }
 
-  const handleTitleStudyChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newEducation = new Map(education);
-        newEducation.get(formEditing).title.isValid = true;
-        setEducation(newEducation);
-    }
-  }
-
-  const handleStudyStartChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newEducation = new Map(education);
-        newEducation.get(formEditing).start.isValid = true;
-        setEducation(newEducation);
-    }
-  }
-
-  const handleStudyEndChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newEducation = new Map(education);
-        newEducation.get(formEditing).end.isValid = true;
-        setEducation(newEducation);
-    }
-  }
-
-  const handleGeneralInput = (e, name) => {
+  const handleGeneralInput = (e, prop) => {
     if (e.target.checkValidity()) {
         const newGenInfo = {...generalInfo}
-        newGenInfo[name].isValid = true;
+        newGenInfo[prop].isValid = true;
         setGeneralInfo(newGenInfo);
     }
   }
-
-//   const handleLastNameChange = (e) => {
-//     if (e.target.checkValidity()) {
-//         const newGenInfo = {...generalInfo}
-//         newGenInfo.lastName.isValid = true;
-//         setGeneralInfo(newGenInfo);
-//     }
-//   }
-
-//   const handleEmailChange = (e) => {
-//     if (e.target.checkValidity()) {
-//         const newGenInfo = {...generalInfo}
-//         newGenInfo.email.isValid = true;
-//         setGeneralInfo(newGenInfo);
-//     }
-//   }
-
-//   const handlePhoneChange = (e) => {
-//     if (e.target.checkValidity()) {
-//         const newGenInfo = {...generalInfo}
-//         newGenInfo.phone.isValid = true;
-//         setGeneralInfo(newGenInfo);
-//     }
-//   }
 
   const handleRightArrowClick = () => {
     setUnsavedChange(false);
@@ -583,11 +527,7 @@ export function App() {
 
   const educationProps = {
     education: education,
-    handleSchoolNameChange: handleSchoolNameChange,
-    handleDegreeSelectChange: handleDegreeSelectChange,
-    handleTitleStudyChange: handleTitleStudyChange,
-    handleStudyStartChange: handleStudyStartChange,
-    handleStudyEndChange: handleStudyEndChange,
+    handleEducationInput: handleEducationInput,
     handleSubmit: handleEducationSubmit,
     handleAddEducationClick: handleAddEducationClick,
     formEditingHandler: formEditingHandler,
@@ -670,9 +610,15 @@ export function App() {
                             <GeneralInfo  {...generalInfoProps} review={true} /> 
                             <Education {...Object.assign(educationProps, {review:true})} />
                             <Work {...Object.assign(workProps, {review:true})} />
+                            <button onClick={() => handlePageChange(SUBMITTED)} 
+                            className='submit-button'>
+                                Submit Application</button>
                         </>
                     }
-                    {validForms && <button onClick={() => statusDispatch({type: 'clicked_edit', page:SUBMITTED})} className='submit-button'>Submit Application</button>}
+                    {/* {validForms && 
+                    <button onClick={() => handlePageChange(SUBMITTED)} 
+                            className='submit-button'>
+                                Submit Application</button>} */}
                 </section>
             </section>
         )}
