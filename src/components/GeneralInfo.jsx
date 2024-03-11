@@ -1,12 +1,14 @@
 import { ErrorMessage } from "./ErrorMessage";
 
-export function GeneralInfo({ generalInfo,
+export function GeneralInfo({ 
+                              generalInfo,
                               handleGeneralInput, 
                               handleSubmit,
                               handleFormChange,
                               review = false,
                               handlePageChange
-                            }) {
+}) {
+    
     const GENERAL_INFO = 1;
     return (
         <section className={!review ? 'content' : ''}>

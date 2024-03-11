@@ -16,7 +16,8 @@ const REVIEW = 4;
 const SUBMITTED = 5;
 
 // template object for form input variables
-const inputTemplateObj = {  value: '',
+const inputTemplateObj = {  
+                            value: '',
                             isValid: true,
                             message: '' 
                          }
@@ -40,7 +41,8 @@ const statusReducer = (status, action) => {
 
 export function App() {
   const [status, statusDispatch] = useReducer(statusReducer, WELCOME_PAGE);
-  const [generalInfo, setGeneralInfo] = useState({  firstName: {...inputTemplateObj},
+  const [generalInfo, setGeneralInfo] = useState({  
+                                                    firstName: {...inputTemplateObj},
                                                     lastName: {...inputTemplateObj},
                                                     email: {...inputTemplateObj},
                                                     phone: {...inputTemplateObj},
@@ -100,13 +102,14 @@ export function App() {
 
   const handleAddWorkClick = () => {
     const newWork = new Map(work);
-    newWork.set(work.size, { title: {...inputTemplateObj},
-                             company: {...inputTemplateObj},
-                             location: {...inputTemplateObj},
-                             description: {...inputTemplateObj},
-                             start: {...inputTemplateObj},
-                             end: {...inputTemplateObj},
-                             isValid: false
+    newWork.set(work.size, { 
+                            title: {...inputTemplateObj},
+                            company: {...inputTemplateObj},
+                            location: {...inputTemplateObj},
+                            description: {...inputTemplateObj},
+                            start: {...inputTemplateObj},
+                            end: {...inputTemplateObj},
+                            isValid: false
                             });                                         
     setWork(newWork);
   }
@@ -257,13 +260,14 @@ export function App() {
 
   const handleAddEducationClick = () => {
     const newEducation = new Map(education);
-    newEducation.set(education.size, { name: {...inputTemplateObj},
-                                                            degree: {...inputTemplateObj},
-                                                            title: {...inputTemplateObj},
-                                                            start: {...inputTemplateObj},
-                                                            end: {...inputTemplateObj},
-                                                            isValid: false 
-                                                        });
+    newEducation.set(education.size, { 
+                                        name: {...inputTemplateObj},
+                                        degree: {...inputTemplateObj},
+                                        title: {...inputTemplateObj},
+                                        start: {...inputTemplateObj},
+                                        end: {...inputTemplateObj},
+                                        isValid: false 
+                                    });
 
     setEducation(newEducation);
   }
@@ -512,34 +516,55 @@ export function App() {
         return (
             <section className='main'>
                 <Welcome />
-                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+                <RightArrow 
+                    handleClick={handleRightArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
             </section>
         )
     }
     case GENERAL_INFO: {
         return (
             <section className='main'>
-                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <LeftArrow 
+                    handleClick={handleLeftArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
                 <GeneralInfo  {...generalInfoProps} />
-                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+                <RightArrow 
+                    handleClick={handleRightArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
             </section>
         )
     }
     case EDUCATION: {
         return (
             <section className='main'>
-                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <LeftArrow 
+                    handleClick={handleLeftArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
                 <Education {...educationProps} />
-                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+                <RightArrow 
+                    handleClick={handleRightArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
             </section>
         )
     }
     case WORK: {
         return(
             <section className='main'>
-                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <LeftArrow 
+                    handleClick={handleLeftArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
                 <Work {...workProps} />
-                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+                <RightArrow 
+                    handleClick={handleRightArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
             </section>
         )
     }
@@ -552,23 +577,28 @@ export function App() {
         const validForms = (generalInfo.isValid && educationIsValid && workIsValid); 
         return (
             <section className='main'>
-                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <LeftArrow 
+                    handleClick={handleLeftArrowClick} 
+                    hasChanged={unsavedChange} 
+                />
                 <section className='content'>
                     <h1>Review Information</h1>
                     {/* if the forms are not valid, render invalidForms */}
                     {!validForms &&
-                        <InvalidForms generalIsValid={generalInfo.isValid} 
-                                    educationIsValid={educationIsValid} 
-                                    workIsValid={workIsValid} 
-                                    handlePageChange={handlePageChange} /> 
+                        <InvalidForms 
+                            generalIsValid={generalInfo.isValid} 
+                            educationIsValid={educationIsValid} 
+                            workIsValid={workIsValid} 
+                            handlePageChange={handlePageChange} 
+                        /> 
                     }
                     {validForms &&
                         <> 
                             <GeneralInfo  {...generalInfoProps} review={true} /> 
-                            <Education {...Object.assign(educationProps, {review:true})} />
-                            <Work {...Object.assign(workProps, {review:true})} />
+                            <Education {...educationProps} review={true} />
+                            <Work {...workProps} review={true} />
                             <button onClick={() => handlePageChange(SUBMITTED)} 
-                            className='submit-button'>
+                                className='submit-button'>
                                 Submit Application</button>
                         </>
                     }

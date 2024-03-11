@@ -1,6 +1,7 @@
 import { ErrorMessage } from "./ErrorMessage";
 
-export function WorkForm({ index,
+export function WorkForm({ 
+                           index,
                            work,
                            handleWorkInput,
                            formEditingHandler,
@@ -104,9 +105,14 @@ export function WorkForm({ index,
                             className={jobEnd.value ? '' : 'empty-date'} />
                     </div>
                 </div>
-                {review ? <button type='button' onClick={() => handlePageChange(WORK_PAGE)} className='edit-button'>Change</button> 
+                {review ? <button type='button' 
+                                  onClick={() => handlePageChange(WORK_PAGE)} 
+                                  className='edit-button'>
+                                  Change</button> 
                 : 
-                <button type='submit' className='save-button'>Save</button> }
+                <button type='submit' 
+                        className='save-button'>
+                        Save</button> }
             </form>  
         </>
     )

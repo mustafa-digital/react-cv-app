@@ -11,6 +11,7 @@ export function EducationForm({
                             handlePageChange,
                             review=false
     }) {
+
     const edu = education.get(index);
     const schoolName = edu.name;
     const degree = edu.degree;
@@ -20,7 +21,11 @@ export function EducationForm({
     const EDU_PAGE = 2;
     return (
         <>
-            {!review && <button className='close-button' type='button' onClick={handleClose}>&times;</button>}
+            {!review && 
+                <button className='close-button' 
+                        type='button' 
+                        onClick={handleClose}>&times;</button>
+            }
             <form id='education-form'
                 className="section-border" 
                 onSubmit={handleSubmit} 
@@ -109,7 +114,10 @@ export function EducationForm({
                                     disabled={review}  />
                     </div>
                 </div>
-                {review ? <button type='button' onClick={() => handlePageChange(EDU_PAGE)} className='edit-button'>Change</button> 
+                {review ? <button type='button' 
+                                  onClick={() => handlePageChange(EDU_PAGE)} 
+                                  className='edit-button'>
+                                  Change</button> 
                 : 
                 <button type='submit' className='save-button'>Save</button> }
             </form>
