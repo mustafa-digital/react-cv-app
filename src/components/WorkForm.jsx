@@ -2,12 +2,7 @@ import { ErrorMessage } from "./ErrorMessage";
 
 export function WorkForm({ index,
                            work,
-                           handleWorkTitleChange,
-                           handleCompanyNameChange,
-                           handleCompanyLocationChange,
-                           handleWorkDescriptionChange,
-                           handleWorkStartChange,
-                           handleWorkEndChange,
+                           handleWorkInput,
                            formEditingHandler,
                            handleSubmit,
                            handleClose,
@@ -48,7 +43,7 @@ export function WorkForm({ index,
                             name='position-title'
                             placeholder=''
                             defaultValue={jobTitle.value}
-                            onChange={handleWorkTitleChange}
+                            onChange={(e) => handleWorkInput(e, 'title')}
                             disabled={review} 
                             required />
                 </label>
@@ -58,7 +53,7 @@ export function WorkForm({ index,
                            name='company-name'
                            placeholder='' 
                            defaultValue={compName.value}
-                           onChange={handleCompanyNameChange}
+                           onChange={(e) => handleWorkInput(e, 'company')}
                            disabled={review} 
                            required />
                 </label>
@@ -69,7 +64,7 @@ export function WorkForm({ index,
                            name='company-location'
                            placeholder=''
                            defaultValue={compLocation.value}
-                           onChange={handleCompanyLocationChange}
+                           onChange={(e) => handleWorkInput(e, 'location')}
                            disabled={review}  
                            required />
                 </label>
@@ -81,7 +76,7 @@ export function WorkForm({ index,
                               rows='15'
                               wrap='hard' 
                               defaultValue={jobDesc.value}
-                              onChange={handleWorkDescriptionChange}
+                              onChange={(e) => handleWorkInput(e, 'description')}
                               disabled={review} />
                 </label>
 
@@ -96,7 +91,7 @@ export function WorkForm({ index,
                             id='date-work-start'
                             placeholder=''
                             defaultValue={jobStart.value}
-                            onChange={handleWorkStartChange}
+                            onChange={(e) => handleWorkInput(e, 'start')}
                             disabled={review} 
                             required />
                     <span> to </span>
@@ -104,7 +99,7 @@ export function WorkForm({ index,
                             name='date-work-end'
                             placeholder=''
                             defaultValue={jobEnd.value}
-                            onChange={handleWorkEndChange}
+                            onChange={(e) => handleWorkInput(e, 'end')}
                             disabled={review}
                             className={jobEnd.value ? '' : 'empty-date'} />
                     </div>

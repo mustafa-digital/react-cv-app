@@ -62,6 +62,55 @@ export function App() {
     setUnsavedChange(true);
   }
 
+  /* handler for close button on education forms
+     removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
+  */
+  const handleEduClose = (e) => {
+    let indexToDelete = Number(e.target.nextSibling.dataset.index);
+    let newEdu = new Map();
+    for (const [index, edu] of education.entries()){
+        if (index > indexToDelete){
+            newEdu.set((index - 1), edu);
+        }
+        else if (index < indexToDelete){
+            newEdu.set(index, edu);
+        }
+    }
+    setEducation(newEdu);
+    setFormEditing(0);
+  }
+
+  /* handler for close button on work forms
+     removes the entry from work map, reduces the work count, and moves entries with indices higher than the deleted index up one place 
+  */
+  const handleWorkClose = (e) => {
+    let indexToDelete = Number(e.target.nextSibling.dataset.index);
+    let newWork = new Map();
+    for (const [index, job] of work.entries()){
+        if (index > indexToDelete){
+            newWork.set((index - 1), job);
+        }
+        else if (index < indexToDelete){
+            newWork.set(index, job);
+        }
+    }
+    setWork(newWork);
+    setFormEditing(0);
+  }
+
+  const handleAddWorkClick = () => {
+    const newWork = new Map(work);
+    newWork.set(work.size, { title: {...inputTemplateObj},
+                             company: {...inputTemplateObj},
+                             location: {...inputTemplateObj},
+                             description: {...inputTemplateObj},
+                             start: {...inputTemplateObj},
+                             end: {...inputTemplateObj},
+                             isValid: false
+                            });                                         
+    setWork(newWork);
+  }
+
   const handleWorkSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -194,6 +243,31 @@ export function App() {
     setUnsavedChange(false);
   }
 
+  const handleWorkInput = (e, prop) => {
+    if (e.target.checkValidity()) {
+        let newWork = new Map(work);
+        newWork.get(formEditing)[prop].isValid = true;
+        setWork(newWork);
+    }
+  }
+
+  const formEditingHandler = (e) => {
+    setFormEditing(Number(e.target.closest('form').dataset.index));
+  }
+
+  const handleAddEducationClick = () => {
+    const newEducation = new Map(education);
+    newEducation.set(education.size, { name: {...inputTemplateObj},
+                                                            degree: {...inputTemplateObj},
+                                                            title: {...inputTemplateObj},
+                                                            start: {...inputTemplateObj},
+                                                            end: {...inputTemplateObj},
+                                                            isValid: false 
+                                                        });
+
+    setEducation(newEducation);
+  }
+
   const handleEducationSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -314,120 +388,6 @@ export function App() {
     setEducation(newEducation);
     setUnsavedChange(false);
   }
-
-  /* handler for close button on education forms
-     removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
-  */
-  const handleEduClose = (e) => {
-    let indexToDelete = Number(e.target.nextSibling.dataset.index);
-    let newEdu = new Map();
-    for (const [index, edu] of education.entries()){
-        if (index > indexToDelete){
-            newEdu.set((index - 1), edu);
-        }
-        else if (index < indexToDelete){
-            newEdu.set(index, edu);
-        }
-    }
-    setEducation(newEdu);
-    setFormEditing(0);
-  }
-
-  /* handler for close button on work forms
-     removes the entry from work map, reduces the work count, and moves entries with indices higher than the deleted index up one place 
-  */
-  const handleWorkClose = (e) => {
-    let indexToDelete = Number(e.target.nextSibling.dataset.index);
-    let newWork = new Map();
-    for (const [index, job] of work.entries()){
-        if (index > indexToDelete){
-            newWork.set((index - 1), job);
-        }
-        else if (index < indexToDelete){
-            newWork.set(index, job);
-        }
-    }
-    setWork(newWork);
-    setFormEditing(0);
-  }
-
-  const handleAddWorkClick = () => {
-    const newWork = new Map(work);
-    newWork.set(work.size, { title: {...inputTemplateObj},
-                             company: {...inputTemplateObj},
-                             location: {...inputTemplateObj},
-                             description: {...inputTemplateObj},
-                             start: {...inputTemplateObj},
-                             end: {...inputTemplateObj},
-                             isValid: false
-                            });                                         
-    setWork(newWork);
-  }
-
-  const handleWorkTitleChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newWork = new Map(work);
-        newWork.get(formEditing).title.isValid = true;
-        setWork(newWork);
-    }
-  }
-
-  const handleCompanyNameChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newWork = new Map(work);
-        newWork.get(formEditing).company.isValid = true;
-        setWork(newWork);
-    }
-  }
-
-  const handleCompanyLocationChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newWork = new Map(work);
-        newWork.get(formEditing).location.isValid = true;
-        setWork(newWork);
-    }
-  }
-
-  const handleWorkDescriptionChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newWork = new Map(work);
-        newWork.get(formEditing).description.isValid = true;
-        setWork(newWork);
-    }
-  }
-
-  const handleWorkStartChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newWork = new Map(work);
-        newWork.get(formEditing).start.isValid = true;
-        setWork(newWork);
-    }
-  }
-
-  const handleWorkEndChange = (e) => {
-    if (e.target.checkValidity()) {
-        let newWork = new Map(work);
-        newWork.get(formEditing).end.isValid = true;
-        setWork(newWork);
-    }
-  }
-
-  const formEditingHandler = (e) => {
-    setFormEditing(Number(e.target.closest('form').dataset.index));
-  }
-
-  const handleAddEducationClick = () => {
-    const newEducation = new Map(education);
-    newEducation.set(education.size, { name: {...inputTemplateObj},
-                                                            degree: {...inputTemplateObj},
-                                                            title: {...inputTemplateObj},
-                                                            start: {...inputTemplateObj},
-                                                            end: {...inputTemplateObj},
-                                                            isValid: false 
-                                                        });
-
-    setEducation(newEducation);
-  }
   
   const handleEducationInput = (e, prop) => {
     if (e.target.checkValidity()) {
@@ -538,12 +498,7 @@ export function App() {
 
   const workProps = {
     work: work,
-    handleWorkTitleChange: handleWorkTitleChange,
-    handleCompanyNameChange: handleCompanyNameChange,
-    handleCompanyLocationChange: handleCompanyLocationChange,
-    handleWorkDescriptionChange: handleWorkDescriptionChange,
-    handleWorkStartChange: handleWorkStartChange,
-    handleWorkEndChange: handleWorkEndChange,
+    handleWorkInput: handleWorkInput,
     handleSubmit: handleWorkSubmit,
     handleAddWorkClick: handleAddWorkClick,
     formEditingHandler: formEditingHandler,
@@ -552,41 +507,43 @@ export function App() {
     handlePageChange: handlePageChange
   }
 
-  if (status === WELCOME_PAGE) {
-    return (
-        <section className='main'>
-            <Welcome />
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </section>
-    )
-  }
-  else if (status === GENERAL_INFO) {
-    return (
-        <section className='main'>
-            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-            <GeneralInfo  {...generalInfoProps} />
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </section>
-    )
-  }
-  else if (status === EDUCATION) {
-    return (
-        <section className='main'>
-            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-            <Education {...educationProps} />
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </section>
-    )
-  }
-  else if (status === WORK) {
-    return(
-        <section className='main'>
-            <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
-            <Work {...workProps} />
-            <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
-        </section>
-    )}
-    else if (status === REVIEW) {
+  switch (status) {
+    case WELCOME_PAGE: {
+        return (
+            <section className='main'>
+                <Welcome />
+                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+            </section>
+        )
+    }
+    case GENERAL_INFO: {
+        return (
+            <section className='main'>
+                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <GeneralInfo  {...generalInfoProps} />
+                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+            </section>
+        )
+    }
+    case EDUCATION: {
+        return (
+            <section className='main'>
+                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <Education {...educationProps} />
+                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+            </section>
+        )
+    }
+    case WORK: {
+        return(
+            <section className='main'>
+                <LeftArrow handleClick={handleLeftArrowClick} hasChanged={unsavedChange} />
+                <Work {...workProps} />
+                <RightArrow handleClick={handleRightArrowClick} hasChanged={unsavedChange} />
+            </section>
+        )
+    }
+    case REVIEW: {
         // check if the forms are valid or not to determine what to render on this page
         let educationIsValid = checkIsValid(education);
         let workIsValid = checkIsValid(work);
@@ -615,21 +572,22 @@ export function App() {
                                 Submit Application</button>
                         </>
                     }
-                    {/* {validForms && 
-                    <button onClick={() => handlePageChange(SUBMITTED)} 
-                            className='submit-button'>
-                                Submit Application</button>} */}
                 </section>
             </section>
-        )}
-        else if (status === SUBMITTED) {
-            return (
-                <section>
-                    <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
-                    <h2>Application Submitted</h2>
-                    <p>Thank you for submitting your application.</p>
-                    <p>We will review your application and notify you if you are selected to move forward.</p>
-                </section>
-            )
-        }
+        )    
+    }
+    case SUBMITTED: {
+        return (
+            <section>
+                <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
+                <h2>Application Submitted</h2>
+                <p>Thank you for submitting your application.</p>
+                <p>We will review your application and notify you if you are selected to move forward.</p>
+            </section>
+        )
+    }
+    default: {
+        throw Error('Error! Not a valid page. Status = ' + status);
+    } 
+  }
 }
