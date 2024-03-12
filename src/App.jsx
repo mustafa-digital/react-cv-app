@@ -612,7 +612,7 @@ export function App() {
     case PAGE_NUMS.SUBMITTED: {
         return (
             <section>
-                <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
+                <img className='check-mark-icon' src='assets/checkbox-outline.svg' alt='check-mark icon' />
                 <h2>Application Submitted</h2>
                 <p>Thank you for submitting your application.</p>
                 <p>We will review your application and notify you if you are selected to move forward.</p>

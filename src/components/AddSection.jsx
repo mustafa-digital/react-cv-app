@@ -4,7 +4,7 @@ export function AddSection({ sectionName, handleClick }) {
             <div className='add-section'>
                 <button className='add-section-btn'
                         onClick={handleClick}>
-                    <img src='src/assets/plus-box.svg' alt={`Add ${sectionName} information button`}></img>
+                    <img src='assets/plus-box.svg' alt={`Add ${sectionName} information button`}></img>
                 </button>
                 <h2 className='add-section-text'>{`Add ${sectionName}`}</h2>
             </div>

@@ -18,7 +18,7 @@ export function RightArrow({ title='Move next', handleClick, hasChanged}) {
                         }
                     }}>
                     
-                <img src='9554506_arrow_right_next_navigation_pointer_icon.svg'
+                <img src='assets/9554506_arrow_right_next_navigation_pointer_icon.svg'
                     alt='Move next'>
                 </img>
             </button>

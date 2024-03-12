@@ -16,7 +16,7 @@ export function LeftArrow({ title='Move back', handleClick, hasChanged }) {
                             handleClick();
                         }
                     }}>
-                <img src='9554501_arrow_left_navigation_gps_direction_icon.svg'
+                <img src='assets/9554501_arrow_left_navigation_gps_direction_icon.svg'
                     alt='Move back'>
                 </img>
             </button>

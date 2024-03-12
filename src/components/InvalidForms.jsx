@@ -12,7 +12,7 @@ export function InvalidForms({ generalIsValid, educationIsValid, workIsValid, ha
                     <span className="form-invalid-span" onClick={() => handlePageChange(page)} title={'Go to page'}>
                     {formName}
                     </span>&nbsp;form is incomplete.
-                    <img style={imageStyle} src='src/assets/alert-box.svg' alt='alert-icon' />
+                    <img style={imageStyle} src='assets/alert-box.svg' alt='alert-icon' />
                 </p>
                 {/* <button className='review-button-invalid' onClick={() => handlePageChange(page)} >Edit</button> */}
             </div>
