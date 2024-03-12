@@ -8,10 +8,10 @@
 *--------------------------------------------------*/
 
 export function checkIsValid(map) {
-    for (const [id, obj] of map.entries()) {
-        if (!obj.isValid){
-            return false;
-        }
+  for (const [id, obj] of map.entries()) {
+    if (!obj.isValid) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
