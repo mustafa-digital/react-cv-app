@@ -1,8 +1,14 @@
 :root {
     --section-border: #94a3b8;
     --general-font-color: #4b5563;
-    --add-edu-text-color: #386bff;
+    --emphasis-color: #386bff;
+    --emphasis-color-light: #5f87ff;
+    --emphasis-color-dark: #265bf8;
+    --white-bg: #fafafa;
+    --white-bg-hover: #eeeeee;
+    --white-bg-active: #a3a1a1;
 }
+
 
 * {
     padding : 0px;
@@ -130,7 +136,7 @@ input[type=date]:disabled {
 
 .add-section-text {
     font-size: 1.2rem;
-    color: var(--add-edu-text-color);
+    color: var(--emphasis-color);
 }
 
 .job-desc-txtarea {
@@ -182,7 +188,7 @@ input:valid:not(.empty-date),
 }
 
 input:focus {
-    background-color: #fafafa;
+    background-color: var(--white-bg);
 }
 
 .modal-backdrop {
@@ -198,12 +204,61 @@ input:focus {
     position: relative;
     top: 40%;
     left: 40%;
-    background-color: #fafafa;
+    background-color: var(--white-bg);
     border: 2px solid #242424;
     border-radius: 10px;
     padding: 10px;
     width: 400px;
-    height: 100px;
+    height: 125px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.warning-dialog > h2 {
+    font-size: 1.2rem;
+}
+
+.dialog-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: end;
+}
+
+.stay-btn, 
+.leave-btn {
+    height: 32px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 200px;
+    font-size: 1rem;
+}
+
+.leave-btn {
+    background-color: var(--emphasis-color);
+    color: var(--white-bg);
+}
+
+.stay-btn:hover {
+    background-color: var(--white-bg-hover);
+}
+
+.stay-btn:active {
+    background-color: var(--white-bg-active);
+}
+
+.leave-btn:hover {
+    background-color: var(--emphasis-color-light);
+}
+
+.leave-btn:active {
+    background-color: var(--emphasis-color-dark);
+}
+
+.stay-btn {
+    background-color: transparent;
+    border-color: var(--emphasis-color);
 }
 
 .review-section {
@@ -241,7 +296,7 @@ input:focus {
 }
 
 .form-invalid-span {
-    color:#386bff;
+    color: var(--emphasis-color);
     cursor: pointer;
     text-decoration: underline;
 }
@@ -262,5 +317,23 @@ input:focus {
 .content {
     grid-area: 1 / 2 / 2 / 3;
     text-align: start;
+    display: grid;
 }
 
+.submit-button {
+    background-color: var(--emphasis-color);
+    color: var(--white-bg);
+    height: auto;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: var(--emphasis-color-light);
+}
+
+.submit-button:active {
+    background-color: var(--emphasis-color-dark);
+}

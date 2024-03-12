@@ -8,19 +8,22 @@ import { Work } from './components';
 import { InvalidForms } from './components';
 import { checkIsValid } from './utils';
 
-const WELCOME_PAGE = 0;
-const GENERAL_INFO = 1;
-const EDUCATION = 2;
-const WORK = 3;
-const REVIEW = 4;
-const SUBMITTED = 5;
+// PAGE NUMBER CONSTANTS
+const PAGE_NUMS = {
+    WELCOME_PAGE: 0,
+    GENERAL_INFO: 1,
+    EDUCATION: 2,
+    WORK: 3,
+    REVIEW: 4,
+    SUBMITTED: 5
+}
 
 // template object for form input variables
 const inputTemplateObj = {  
                             value: '',
                             isValid: true,
                             message: '' 
-                         }
+}
 
 const statusReducer = (status, action) => {
     switch(action.type) {
@@ -40,7 +43,7 @@ const statusReducer = (status, action) => {
 }
 
 export function App() {
-  const [status, statusDispatch] = useReducer(statusReducer, WELCOME_PAGE);
+  const [status, statusDispatch] = useReducer(statusReducer, PAGE_NUMS.WELCOME_PAGE);
   const [generalInfo, setGeneralInfo] = useState({  
                                                     firstName: {...inputTemplateObj},
                                                     lastName: {...inputTemplateObj},
@@ -512,7 +515,7 @@ export function App() {
   }
 
   switch (status) {
-    case WELCOME_PAGE: {
+    case PAGE_NUMS.WELCOME_PAGE: {
         return (
             <section className='main'>
                 <Welcome />
@@ -523,7 +526,7 @@ export function App() {
             </section>
         )
     }
-    case GENERAL_INFO: {
+    case PAGE_NUMS.GENERAL_INFO: {
         return (
             <section className='main'>
                 <LeftArrow 
@@ -538,7 +541,7 @@ export function App() {
             </section>
         )
     }
-    case EDUCATION: {
+    case PAGE_NUMS.EDUCATION: {
         return (
             <section className='main'>
                 <LeftArrow 
@@ -553,7 +556,7 @@ export function App() {
             </section>
         )
     }
-    case WORK: {
+    case PAGE_NUMS.WORK: {
         return(
             <section className='main'>
                 <LeftArrow 
@@ -568,7 +571,7 @@ export function App() {
             </section>
         )
     }
-    case REVIEW: {
+    case PAGE_NUMS.REVIEW: {
         // check if the forms are valid or not to determine what to render on this page
         let educationIsValid = checkIsValid(education);
         let workIsValid = checkIsValid(work);
@@ -597,7 +600,7 @@ export function App() {
                             <GeneralInfo  {...generalInfoProps} review={true} /> 
                             <Education {...educationProps} review={true} />
                             <Work {...workProps} review={true} />
-                            <button onClick={() => handlePageChange(SUBMITTED)} 
+                            <button onClick={() => handlePageChange(PAGE_NUMS.SUBMITTED)} 
                                 className='submit-button'>
                                 Submit Application</button>
                         </>
@@ -606,7 +609,7 @@ export function App() {
             </section>
         )    
     }
-    case SUBMITTED: {
+    case PAGE_NUMS.SUBMITTED: {
         return (
             <section>
                 <img className='check-mark-icon' src='src/assets/checkbox-outline.svg' alt='check-mark icon' />
