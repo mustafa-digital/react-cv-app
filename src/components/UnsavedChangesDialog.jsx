@@ -1,3 +1,14 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    UnsavedChangesDialog.jsx
+    PURPOSE: Tells user they have unsaved changes and asks them if they want to leave
+    Gives option to stay on page, or leave, if user clicks leave page, changes are lost
+
+    PROPS: stayOnPage: function, leavePage: function
+    RETURNS: UnsavedChangesDialog component
+*--------------------------------------------------*/
+
 export function UnsavedChangesDialog({ stayOnPage, leavePage }) {
     return (
         <div className='modal-backdrop'>

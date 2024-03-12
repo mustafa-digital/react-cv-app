@@ -1,3 +1,13 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    AddSectionjsx
+    PURPOSE: Renders the "add new form" section for work and education pages
+
+    PROPS: sectionName: string, handleClick: function
+    RETURNS: AddSection component
+*--------------------------------------------------*/
+
 export function AddSection({ sectionName, handleClick }) {
     return (
         <section className="section-border add-section-wrapper">

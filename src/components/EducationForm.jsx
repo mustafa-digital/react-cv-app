@@ -1,3 +1,14 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    EducationForm.jsx
+    PURPOSE: Renders an education form, input values and handlers from props
+    renders some components conditionally based on review prop, false by default
+
+    PROPS: educationProps, review: boolean
+    RETURNS: EducationForm component
+*--------------------------------------------------*/
+
 import { ErrorMessage } from "./ErrorMessage";
 
 export function EducationForm({
@@ -12,6 +23,7 @@ export function EducationForm({
                             review=false
     }) {
 
+    // get the education form values at index
     const edu = education.get(index);
     const schoolName = edu.name;
     const degree = edu.degree;

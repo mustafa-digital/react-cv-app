@@ -1,3 +1,16 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    LeftArrow.jsx
+    PURPOSE: Renders Left Arrow component
+    This component is used to navigate back
+    Opens portal to render UnsavedChangesDialog on document body if hasChanged is true
+
+    PROPS: title: string, handleClick: function, hasChanged: boolean
+    STATE: showModal
+    RETURNS: LeftArrow component
+*--------------------------------------------------*/
+
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";

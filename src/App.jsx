@@ -1,3 +1,12 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    APP.JSX
+    PURPOSE: RENDERS PAGE AND STORES STATE AND HANDLERS
+
+    AUTHOR: MUSTAFA ATOOF
+*--------------------------------------------------*/
+
 import { useState, useReducer } from 'react';
 import { GeneralInfo } from './components';
 import { Welcome } from './components';
@@ -56,6 +65,10 @@ export function App() {
   const [work, setWork] = useState(new Map());
   const [unsavedChange, setUnsavedChange] = useState(false);
 
+  /*
+    handles page changes to specific pages - not using arrow buttons
+    changes status state
+  */
   const handlePageChange = (page) => {
     statusDispatch({
         type: 'clicked_edit',
@@ -63,12 +76,17 @@ export function App() {
     })
   }
 
+  /*
+    changes unsavedChanges state to true when the current form has been modified
+    when user tries to leave page with unsaved changes flagged, a warning dialog will open
+  */
   const handleFormChange = () => {
     setUnsavedChange(true);
   }
 
-  /* handler for close button on education forms
-     removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
+  /* 
+    handler for close button on education forms
+    removes the entry from education map, reduces the edu count, and moves entries with indices higher than the deleted index up one place 
   */
   const handleEduClose = (e) => {
     let indexToDelete = Number(e.target.nextSibling.dataset.index);
@@ -85,8 +103,9 @@ export function App() {
     setFormEditing(0);
   }
 
-  /* handler for close button on work forms
-     removes the entry from work map, reduces the work count, and moves entries with indices higher than the deleted index up one place 
+  /* 
+    handler for close button on work forms
+    removes the entry from work map, reduces the work count, and moves entries with indices higher than the deleted index up one place 
   */
   const handleWorkClose = (e) => {
     let indexToDelete = Number(e.target.nextSibling.dataset.index);
@@ -103,6 +122,10 @@ export function App() {
     setFormEditing(0);
   }
 
+  /*
+    handles adding a new work form
+    adds a work object to the work state object
+  */
   const handleAddWorkClick = () => {
     const newWork = new Map(work);
     newWork.set(work.size, { 
@@ -117,6 +140,10 @@ export function App() {
     setWork(newWork);
   }
 
+  /*
+    handles the work form submit event (when user presses save)
+    does validity checking on each input and changes the state isValid property accordingly
+  */
   const handleWorkSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -249,6 +276,10 @@ export function App() {
     setUnsavedChange(false);
   }
 
+  /*
+    handles input change events in work form
+    changes the isValid property if component is valid
+  */
   const handleWorkInput = (e, prop) => {
     if (e.target.checkValidity()) {
         let newWork = new Map(work);
@@ -257,10 +288,18 @@ export function App() {
     }
   }
 
+  /*
+    this handler changes the formEditing state when user clicks on a certain form
+    formEditing will equal the data-index value of the clicked form
+  */
   const formEditingHandler = (e) => {
     setFormEditing(Number(e.target.closest('form').dataset.index));
   }
 
+  /*
+    handles adding a new education form
+    adds a education object to the education state object
+  */
   const handleAddEducationClick = () => {
     const newEducation = new Map(education);
     newEducation.set(education.size, { 
@@ -275,6 +314,10 @@ export function App() {
     setEducation(newEducation);
   }
 
+  /*
+    handles the education form submit event (when user presses save)
+    does validity checking on each input and changes the state isValid property accordingly
+  */
   const handleEducationSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -396,6 +439,10 @@ export function App() {
     setUnsavedChange(false);
   }
   
+  /*
+    handles input change events in education form
+    changes the isValid property if component is valid
+  */
   const handleEducationInput = (e, prop) => {
     if (e.target.checkValidity()) {
         let newEducation = new Map(education);
@@ -404,6 +451,10 @@ export function App() {
     }
   }
 
+  /*
+    handles general info submit event
+    checks validity of the inputs, and saves state if valid
+  */
   const handleGeneralSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -462,6 +513,10 @@ export function App() {
     setUnsavedChange(false);
   }
 
+  /*
+    handler for input change events in general info form
+    sets isValid property to true if it is valid
+  */
   const handleGeneralInput = (e, prop) => {
     if (e.target.checkValidity()) {
         const newGenInfo = {...generalInfo}
@@ -470,6 +525,9 @@ export function App() {
     }
   }
 
+  /*
+    handler for right arrow click, changes page status up by 1
+  */
   const handleRightArrowClick = () => {
     setUnsavedChange(false);
     statusDispatch({
@@ -477,6 +535,9 @@ export function App() {
     })
   }
 
+  /*
+    handler for left arrow click, changes page status down by 1
+  */
   const handleLeftArrowClick = () => {
     setUnsavedChange(false);
     statusDispatch({
@@ -484,6 +545,9 @@ export function App() {
     })
   }
 
+  /*
+    COMPONENT PROP OBJECTS
+  */
   const generalInfoProps = {
     generalInfo: generalInfo,
     handleGeneralInput: handleGeneralInput,
@@ -514,7 +578,11 @@ export function App() {
     handlePageChange: handlePageChange
   }
 
+  /*
+    Render components based on page status
+  */
   switch (status) {
+    //  WELCOME PAGE
     case PAGE_NUMS.WELCOME_PAGE: {
         return (
             <section className='main'>
@@ -526,6 +594,7 @@ export function App() {
             </section>
         )
     }
+    // GENERAL INFO FORM
     case PAGE_NUMS.GENERAL_INFO: {
         return (
             <section className='main'>
@@ -541,6 +610,7 @@ export function App() {
             </section>
         )
     }
+    // EDUCATION FORM
     case PAGE_NUMS.EDUCATION: {
         return (
             <section className='main'>
@@ -556,6 +626,7 @@ export function App() {
             </section>
         )
     }
+    // WORK FORM
     case PAGE_NUMS.WORK: {
         return(
             <section className='main'>
@@ -571,6 +642,7 @@ export function App() {
             </section>
         )
     }
+    // REVIEW PAGE
     case PAGE_NUMS.REVIEW: {
         // check if the forms are valid or not to determine what to render on this page
         let educationIsValid = checkIsValid(education);
@@ -609,6 +681,7 @@ export function App() {
             </section>
         )    
     }
+    // APPLICATION SUBMITTED
     case PAGE_NUMS.SUBMITTED: {
         return (
             <section>

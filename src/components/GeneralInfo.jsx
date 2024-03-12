@@ -1,3 +1,14 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    GeneralInfo.jsx
+    PURPOSE: Renders a general info form, input values and handlers from props
+    renders some components conditionally based on review prop, false by default
+
+    PROPS: generalInfoProps, review: boolean
+    RETURNS: GeneralInfo component
+*--------------------------------------------------*/
+
 import { ErrorMessage } from "./ErrorMessage";
 
 export function GeneralInfo({ 

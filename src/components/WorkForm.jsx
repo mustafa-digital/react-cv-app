@@ -1,3 +1,14 @@
+/*---------------------------------------------------
+    REACT CV APP
+
+    WorkForms.jsx
+    PURPOSE: Renders a work form, input values and handlers from props
+    renders some components conditionally based on review prop, false by default
+
+    PROPS: workProps, review: boolean
+    RETURNS: WorkForm component
+*--------------------------------------------------*/
+
 import { ErrorMessage } from "./ErrorMessage";
 
 export function WorkForm({ 
@@ -11,7 +22,7 @@ export function WorkForm({
                            handlePageChange,
                            review=false
 }) {
-
+    // get the work form values at index
     const w = work.get(index);
     const jobTitle = w.title;
     const compName = w.company;

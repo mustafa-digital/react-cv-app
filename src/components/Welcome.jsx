@@ -1,5 +1,14 @@
-export function Welcome() {
+/*---------------------------------------------------
+    REACT CV APP
 
+    Welcome.jsx
+    PURPOSE: Renders the Welcome page 
+
+    PROPS:
+    RETURNS: Welcome component
+*--------------------------------------------------*/
+
+export function Welcome() {
     return (
         <section className="content">
             <h1>Welcome</h1>
